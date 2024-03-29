@@ -1,8 +1,20 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 //import { useNavigate } from "react-router-dom"
 import Loader from "./Loader"
 
+//import googleButton from "./assets/google_signin_buttons/web/1x/btn_google_signin_dark_pressed_web.png"
 
+// const navigate = (url)=>{
+//   window.location.href = url
+// }
+
+// const auth = async()=>{
+//    const response = await fetch("http://localhost:3000/request",{
+//     method: "POST",
+//    })
+//    const data = await response.json()
+//    navigate(data.url)
+// }
 const LoginCard = () => {
     const [loading, setLoading] = useState(false)
     const [ authScreen,setAuthScreen] = useState("login")
@@ -18,6 +30,24 @@ const LoginCard = () => {
     })
    // const navigate = useNavigate()
    // const toast = useToast()
+
+   const handleCallbackResponse = (response) =>{
+      console.log("Encoded JWT ID token: " + response.credential)
+   }
+
+   useEffect(() => {
+     /* global google */
+     google.accounts.id.initialize({
+      client_id: "229526562187-1fvd3s9m7q3eeo1ltddghppeiqkcairn.apps.googleusercontent.com",
+      callback: handleCallbackResponse
+     })
+
+     google.accounts.id.renderButton(
+       document.getElementById("signInDiv"),
+       { theme: "outline", size: "large" }
+     )
+   }, [])
+
   return (
     <>
         <div className={authScreen==="login" ? "container1 ":"container1 sign-up-mode" }>
@@ -66,7 +96,11 @@ const LoginCard = () => {
             <button  className="btn1"  
            // onClick={handleSignUp}
             >{loading? <Loader size={8} color={"#fff"}/>: "SignUp"}</button>
-           
+           <div id="signInDiv">
+           <button type="button" >
+            Google Sign In
+           </button>
+           </div>
           </form>
         </div>
       </div>

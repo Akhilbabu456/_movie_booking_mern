@@ -14,7 +14,14 @@
   .btn-primary{
     width: 120px;
   }
- 
+  .navbar-no-border {
+    border: none;
+  }
+  
+  .navbar-no-border .navbar-brand, .navbar-no-border .navbar-nav > li > a {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
  
   
   .lowStock{
@@ -133,14 +140,14 @@
     position: relative;
     width: 100%;
     background-color: #fff;
-    min-height: 90vh;
-    overflow: hidden;
+    min-height: 100vh;
+    
   }
   
   .forms-container {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 1100px;
     top: 0;
     left: 0;
   }

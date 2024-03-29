@@ -10,6 +10,8 @@ const MyBookingPage = () => {
   direction={{ base: 'column', sm: 'row' }}
   overflow='hidden'
   variant='outline'
+  w={"700px"}
+  m={"20px"}
 >
   <Image
     objectFit='cover'
