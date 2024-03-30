@@ -1,6 +1,7 @@
 
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
+
 import AuthPage from './pages/AuthPage'
 import UserPage from './pages/UserPage'
 import MovieViewPage from './pages/MovieViewPage'

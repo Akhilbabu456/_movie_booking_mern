@@ -284,9 +284,24 @@
     cursor: pointer;
     transition: 0.5s;
   }
+
   
   .btn1:hover {
     background-color: #2875cc;
+  }
+  .btn2{
+    width: 150px;
+    background-color: #2875cc;
+    border: none;
+    outline: none;
+    height: 30px;
+    border-radius: 5px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 10px 0;
+    cursor: pointer;
+    padding: 3px;
   }
   .panels-container {
     position: absolute;
