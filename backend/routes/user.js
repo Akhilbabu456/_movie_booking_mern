@@ -52,7 +52,7 @@ router.post("/signup",[
                 to: email,
                 subject: 'Email Verification',
                 text: 'Please click the link below to verify your email:',
-                html: `<a href="http://localhost:3000/api/user/verify-email/${token}">Verify Email</a>`,
+                html: `<a href="https://movie-booking-mern.vercel.app/api/user/verify-email/${token}">Verify Email</a>`,
               };
           
              const send = await transporter.sendMail(mailOptions)
