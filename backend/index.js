@@ -31,3 +31,5 @@ app.use("/api/admin", adminRoute)
 app.listen(port, ()=>{
     console.log(`Listening to port http://localhost:${port}`)
 })
+
+module.exports = app
