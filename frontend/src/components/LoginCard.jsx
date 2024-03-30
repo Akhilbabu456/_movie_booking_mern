@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
-//import { useNavigate } from "react-router-dom"
+import { useToast } from '@chakra-ui/react'
+import { useNavigate } from "react-router-dom"
 import Loader from "./Loader"
 
-
-import { GoogleLogin } from '@react-oauth/google'
 
 const LoginCard = () => {
     const [loading, setLoading] = useState(false)
@@ -13,14 +12,56 @@ const LoginCard = () => {
        name: "",
        email: "",
        password: "",
-       password_confirmation: "",
+       confirmPassword: "",
     })
     const [login, setLogin] = useState({
       email: "",
       password: "",
     })
-   // const navigate = useNavigate()
-   // const toast = useToast()
+   const navigate = useNavigate()
+   const toast = useToast()
+   const handleSignUp = async(e)=>{
+    e.preventDefault()
+    setLoading(true)
+    try{
+      const url = "http://localhost:3000/api/signup"
+      const res = await fetch(url,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signUp),
+      })
+      let data = await res.json()
+      console.log(data)
+      if(res.status === 200){
+        setLoading(false)
+        navigate("/")
+        toast({
+          title: "Account created successfully",
+          status: "success",
+          duration: 2500,
+          isClosable: true,
+        })
+      }else{
+        setLoading(false)
+        if(data.errors.name || data.errors.email || data.errors.password || data.errors.password_confirmation){
+          toast({
+            title: `${data.errors.name || data.errors.email || data.errors.password || data.errors.password_confirmation}` ,
+            status: "error",
+            duration: 2500,
+            isClosable: true,
+          })
+        }
+       
+      }
+    }catch(err){
+      console.log(err)
+    
+       
+      
+    }
+   }
   
   
 
@@ -67,22 +108,11 @@ const LoginCard = () => {
             <div className="input-field">
               <i className="fas fa-lock"></i>
               <input type="password" placeholder="Confirm Password" value={signUp.password_confirmation} 
-              onChange={(e)=>setSignUp({...signUp,password_confirmation:e.target.value})}/>
+              onChange={(e)=>setSignUp({...signUp,confirmPassword:e.target.value})}/>
             </div>
             <button  className="btn1"  
-            //onClick={handleSignUp}
+            onClick={handleSignUp}
             >{loading? <Loader size={8} color={"#fff"}/>: "SignUp"}</button>
-           <GoogleLogin
-           onSuccess={credentialResponse => {
-            console.log(credentialResponse.credential)
-           setGoogleId(credentialResponse.credential);
-           
-  }}
-  onError={() => {
-    console.log('Login Failed');
-  }}
-/>;
-           
           </form>
         </div>
       </div>
