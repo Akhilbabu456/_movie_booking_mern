@@ -64,7 +64,7 @@ router.post("/signup",[
                    token
                  })
                  await check.save()
-                 res.status(200).json({ success: 'Verification email sent' })
+                 res.status(200).json({ success: 'Verification email sent' , token: check._id})
              }else{
                  res.status(500).json({ error: 'Failed to send verification email' });
   
@@ -73,10 +73,24 @@ router.post("/signup",[
               console.log(error)
             }
         }
-        
+       
 
     }
 }) 
+
+router.get("/verify/:id", async(req,res)=>{
+  const id = req.params.id
+  
+    const verified = await verify.findOne({_id: id})
+    
+
+  
+  if(!verified){
+    res.status(200).json({ success: 'Account Created' });
+  }else{
+    res.status(400).json({ error: 'Email not verified' });
+  }
+})
 
 router.get('/verify-email/:id', async(req, res) => {
   const token = req.params.id

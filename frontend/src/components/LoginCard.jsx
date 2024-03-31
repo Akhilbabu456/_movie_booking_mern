@@ -6,7 +6,7 @@ import Loader from "./Loader"
 
 const LoginCard = () => {
     const [loading, setLoading] = useState(false)
-    const [googleId, setGoogleId] = useState("")
+    const [id, setId] = useState("")
     const [ authScreen,setAuthScreen] = useState("login")
     const [signUp, setSignUp] = useState({
        name: "",
@@ -20,11 +20,12 @@ const LoginCard = () => {
     })
    const navigate = useNavigate()
    const toast = useToast()
+
    const handleSignUp = async(e)=>{
     e.preventDefault()
     setLoading(true)
     try{
-      const url = "http://localhost:3000/api/signup"
+      const url = "http://localhost:3000/api/user/signup"
       const res = await fetch(url,{
         method: "POST",
         headers: {
@@ -33,12 +34,14 @@ const LoginCard = () => {
         body: JSON.stringify(signUp),
       })
       let data = await res.json()
+      setId(data.token)
       console.log(data)
+
       if(res.status === 200){
-        setLoading(false)
-        navigate("/")
+        setLoading(true)
         toast({
-          title: "Account created successfully",
+          title: "Verification email send please verify",
+          description: "Link expires in 30sec",
           status: "success",
           duration: 2500,
           isClosable: true,
@@ -55,6 +58,34 @@ const LoginCard = () => {
         }
        
       }
+
+      setTimeout(async()=>{
+        console.log(id)
+        const response = await fetch(`http://localhost:3000/api/user/verify/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        if(response.status === 200){
+          setLoading(false)
+          toast({
+            title: "Account created successfully",
+            description: "Please login",
+            status: "success",
+            duration: 2500,
+            isClosable: true,
+          })
+        }else{
+          setLoading(false)
+          toast({
+            title: "Account not created please try again",
+            status: "error",
+            duration: 2500,
+            isClosable: true,
+          })
+        }
+      },35000)
     }catch(err){
       console.log(err)
     
