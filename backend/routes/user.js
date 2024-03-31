@@ -1,6 +1,7 @@
 const express = require("express")
 const bcrypt = require("bcryptjs")
 const router = express.Router()
+const crypto = require("crypto");
 const {body, validationResult} = require("express-validator")
 const razorpay = require('razorpay')
 const nodemailer = require('nodemailer')
@@ -178,13 +179,147 @@ router.get("/movie/:id", authMiddleware, async(req,res)=>{
 })
 
 
-router.post("/movie/book/:id", authMiddleware, async(req,res)=>{
+// router.post("/movie/book/:id", authMiddleware, async(req,res)=>{
+//   const id = req.params.id
+//   const { date, time, seats} = req.body
+//   const userId = req.user.id
+//   const movie = await Movie.findOne({_id: id})
+//   try{
+//     const booking = await new Booking({
+//         user : userId,
+//         movie : id,
+//         date ,
+//         time,
+//         seats
+//     })
+//     await booking.save()
+
+//     const razorpayClient = new razorpay({
+//       key_id: 'rzp_test_7qtDyF7UTRLDBn',
+//       key_secret: 'dnNfgM4CtypK8ZemazFojhd3'
+//     })
+
+//     const order = await razorpayClient.orders.create({
+//        amount: (movie.ticketPrice * seats)*100,
+//        currency: 'INR',
+//        receipt: 'receipt#1',
+//        payment_capture: 1
+//     })
+
+//     let collection = movie.collections + (movie.ticketPrice * seats)
+
+//     if(order){
+//       await Movie.findByIdAndUpdate({_id: id}, {
+//         collections: collection
+//       })
+
+//       let transporter = nodemailer.createTransport({
+//         host: "smtp.gmail.com",
+//         port: 465,
+//         secure: true,
+//         auth: {
+//           user: "akhilbeliever001@gmail.com",
+//           pass: "prukmblhnwcenoco",
+//         }
+//       });
+
+//     const mailOptions = {
+//       from: "akhilbeliever001@gmail.com",
+//       to: req.user.email,
+//       subject: 'Movie Booking Confirmation',
+//       text: `Dear ${req.user.name},
+
+//       Your movie booking for movie ID ${id} has been successfully confirmed.
+//       Your booking id ${booking._id}
+
+//       Payment Details:
+//       Amount: ${movie.ticketPrice * seats}
+//       Payment ID: ${order.id}
+//       Payment Status: ${order.status}
+
+
+//       Regards,
+//       Movie Booking Website`
+//     };
+
+//     await transporter.sendMail(mailOptions)
+
+//     res.status(200).json({
+//       success: "Ticket booked succcessfully"
+//     })
+//     }else{
+//       await Booking.deleteOne({_id: booking._id})
+
+//       res.status(400).json({
+//         error: "Payment failed"	
+//       })
+//     }
+//   }catch(err){
+//     console.log(err)
+//     res.status(400).json({
+//       error: "Internal server error"
+//     })
+//   }
+// })
+
+router.post("/order", authMiddleware, async (req, res) => {
+
+  try {
+
+      const razorpay = new Razorpay({
+          key_id: 'rzp_test_7qtDyF7UTRLDBn',
+          key_secret: 'dnNfgM4CtypK8ZemazFojhd3'
+      });
+
+      if(!req.body){
+          return res.status(400).send("Bad Request");
+
+      }
+      const options = req.body;
+
+      const order = await razorpay.orders.create(options);
+
+      if(!order){
+          return res.status(400).send("Bad Request");
+      }
+
+      res.json(order);
+      
+  } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+  }
+})
+
+router.post("/validate/:id", authMiddleware, async (req, res) => {
   const id = req.params.id
-  const { date, time, seats} = req.body
-  const userId = req.user.id
+  const {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    seats,
+    time,
+    date,
+  } = req.body;
   const movie = await Movie.findOne({_id: id})
-  try{
-    const booking = await new Booking({
+  const userId = req.user.id
+  console.log(req.body);
+
+  let bookingId;
+  let user;
+
+  try {
+    const sha = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET);
+
+    //razorpay_order_id + " | " + razorpay_payment_id
+    sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+
+    const digest = sha.digest("hex");
+
+    if (digest !== razorpay_signature) {
+      return res.status(400).json({ message: "Transaction is not legit!" });
+    } else {
+      const booking = await new Booking({
         user : userId,
         movie : id,
         date ,
@@ -192,22 +327,9 @@ router.post("/movie/book/:id", authMiddleware, async(req,res)=>{
         seats
     })
     await booking.save()
+      bookingId = booking._id;
 
-    const razorpayClient = new razorpay({
-      key_id: 'rzp_test_7qtDyF7UTRLDBn',
-      key_secret: 'dnNfgM4CtypK8ZemazFojhd3'
-    })
-
-    const order = await razorpayClient.orders.create({
-       amount: (movie.ticketPrice * seats)*100,
-       currency: 'INR',
-       receipt: 'receipt#1',
-       payment_capture: 1
-    })
-
-    let collection = movie.collections + (movie.ticketPrice * seats)
-
-    if(order){
+      let collection = movie.collections + (movie.ticketPrice * seats)
       await Movie.findByIdAndUpdate({_id: id}, {
         collections: collection
       })
@@ -246,7 +368,7 @@ router.post("/movie/book/:id", authMiddleware, async(req,res)=>{
     res.status(200).json({
       success: "Ticket booked succcessfully"
     })
-    }else{
+    
       await Booking.deleteOne({_id: booking._id})
 
       res.status(400).json({
@@ -259,6 +381,8 @@ router.post("/movie/book/:id", authMiddleware, async(req,res)=>{
       error: "Internal server error"
     })
   }
+
+  
 })
 
 

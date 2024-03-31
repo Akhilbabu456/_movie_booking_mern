@@ -110,7 +110,8 @@ const LoginCard = () => {
     let data = await res.json()
    if(!res.error){
     setLoading(false)
-     localStorage.setItem("token", data.token)
+     localStorage.setItem("token", `Bearer ${data.token}`)
+     localStorage.setItem("user", JSON.stringify(data))
     navigate("/user")
     toast({
       title: "Logged in successfully",

@@ -1,16 +1,17 @@
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UploadWidget from "../hooks/UploadWidget";
 import { useToast } from "@chakra-ui/react";
 
 
 
-const AddMovie = () => {
+const EditMovie = () => {
   const token = localStorage.getItem("token")
   const navigate = useNavigate()
    const toast = useToast()
   const [date, setDate] = useState([])
+  const{ id }= useParams();
   //const [movieDate, setMovieDate] = useState([])
   const [newMovie, setNewMovie] = useState({
     title: "",
@@ -36,6 +37,32 @@ const AddMovie = () => {
         position: "top",
       })
     }else{
+        const getMovieData = async () => {
+            //setLoading(true)
+            try {
+            
+              const response = await fetch(
+                `https://movie-booking-mern.vercel.app/api/user/movie/${id}`,
+                {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `${token}`,
+                  },
+                }
+              );
+             //setLoading(false)
+              let data = await response.json()
+              console.log(data)
+              setNewMovie(data)
+            } catch (err) {
+              
+              console.log(err);
+            }
+          };
+    
+          getMovieData();
+
     const today = new Date();
     const days = [];
 
@@ -88,9 +115,9 @@ const AddMovie = () => {
   }));
   };
 
-  const handleAddMovie = async (e) => {
+  const handleEditMovie = async (e) => {
     e.preventDefault();
-    let response = await fetch("https://movie-booking-mern.vercel.app/api/admin/add", {
+    let response = await fetch(`https://movie-booking-mern.vercel.app/api/admin/edit/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -108,7 +135,7 @@ const AddMovie = () => {
       }else{
         navigate("/user")
          toast({
-          title: "Movie added successfully",
+          title: "Movie Edited successfully",
           status: "success",
           duration: 2500,
           isClosable: true,
@@ -222,7 +249,7 @@ const AddMovie = () => {
                 }}
               </UploadWidget>
 
-              <button onClick={handleAddMovie} className="btn1 solid">Add Movie </button>
+              <button onClick={handleEditMovie} className="btn1 solid">Edit Movie </button>
               {/* //</form>onClick={handleAddMed}>{loading? <Loader size={8} color={"#fff"}/>: "Add Medicine"}
              </button> */}
             </form>
@@ -246,5 +273,5 @@ const AddMovie = () => {
   );
 };
 
-export default AddMovie;
+export default EditMovie;
 

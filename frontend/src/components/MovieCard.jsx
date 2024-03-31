@@ -1,42 +1,83 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./MovieCard.css";
+import { useEffect, useState } from "react";
+import { useToast } from "@chakra-ui/react";
+import Loader from "./Loader";
 
 const MovieCard = () => {
+  let user = localStorage.getItem("token");
+  const [loading, setLoading] = useState(false)
+  const [movieList, setMovieList] = useState([]);
+  const navigate = useNavigate()
+  let toast = useToast()
 
   const handleGet = async()=>{
-    
+    try{
+      setLoading(true)
+      let url = "https://movie-booking-mern.vercel.app/api/user/movie"
+       let res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `${localStorage.getItem("token")}`
+        },
+       })
+       let data = await res.json()
+       setLoading(false)
+       setMovieList(data)
+     }catch(err){
+         console.log(err)
+     }
   }
+
+  useEffect(()=>{
+    if(!user){
+      navigate("/")
+      toast({
+        title: "Unauthorized",
+        status: "error",
+        duration: 2500,
+        isClosable: true,
+      })
+    }
+    // const timeOut = setTimeout(()=>{
+      // }, 500)
+      // return () => clearTimeout(timeOut)
+      handleGet()
+  },[])
 
   return (
     <>
+    {loading && <Loader/>}
       <div className="row">
+      {movieList.map((movie)=>{
+        return(
+          <>  
         <div className="col-md-2  col-sm-6 col-xs-12">
           <div className="movie-card">
             <img
-              src="https://images.hdqwalls.com/wallpapers/bthumb/avatar-the-way-of-the-water-2022-5k-u1.jpg"
+              src={movie.poster}
               alt="Avatar wallpaper"
             />
-            <h3>Avatar: The Way of Water</h3>
+            <h3>{movie.title}</h3>
             <div className="content">
-              <h1>Avatar: The Way of Water</h1>
+              <h1>{movie.title}</h1>
 
               <div className="infos">
-                <span>·&nbsp;&nbsp;2022&nbsp;&nbsp;·&nbsp;&nbsp;3h12</span>
+                <span>·&nbsp;&nbsp;2022&nbsp;&nbsp;·&nbsp;&nbsp;{movie.duration}</span>
               </div>
 
-              <p className="synopsis">
-                Jake Sully lives with his newfound family formed on the
-                extrasolar moon Pandora. Once a familiar threat returns to
-                finish what was previously started, Jake must work with Neytiri
-                and the army of the Navi race to protect their home.
-              </p>
+             
 
-              <Link to="/user/view" className="btn">
+              <Link to={`/user/view/${movie._id}`} className="btn">
                 View
               </Link>
             </div>
           </div>
         </div>
+          </>
+        )
+      })}
       </div>
     </>
   );

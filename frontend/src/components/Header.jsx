@@ -1,37 +1,34 @@
-
 //import { useToast } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "./Loader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useToast } from "@chakra-ui/react";
 
 export default function Header() {
-  //const navigate = useNavigate()
-  //let toast = useToast()
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  let toast = useToast()
+  let user = localStorage.getItem("token");
+  let detail = JSON.parse(localStorage.getItem("user"));
+  const [role, setRole] = useState("");
+  // setRole(detail.data.role)
+  useEffect(() => {
+    setRole(detail?.data?.role || "");
+  }, [detail]);
 
-//   const handleLogout = async()=>{
-//     setLoading(true)
-//     const url = "https://medicalstore.mashupstack.com/api/logout"
-//     const res = await fetch(url,{
-//       method: "POST",
-//       headers:{
-//         "Content-Type": "application/json",
-//         "Authorization": `Bearer ${localStorage.getItem("token")}`
-//       }
-//     })
-//      await res.json()
-//     if(res.ok){
-//       setLoading(false)
-//       navigate("/")
-//       localStorage.removeItem("token")
-//       toast({
-//         title: "Logout Successfully",
-//         status: "success",
-//         duration: 2500,
-//         isClosable: true,
-//       })
-//     }
-//   }
+    const handleLogout = async()=>{
+        navigate("/")
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
+        toast({
+          title: "Logout Successfully",
+          status: "success",
+          duration: 2500,
+          isClosable: true,
+        })
+      }
+    
+
   return (
     <>
       <nav
@@ -56,33 +53,44 @@ export default function Header() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link" aria-current="page" to="/user" hidden>
+                <Link
+                  className="nav-link"
+                  aria-current="page"
+                  to="/user"
+                  hidden
+                >
                   Home
                 </Link>
               </li>
             </ul>
 
-          <Link className="text-white mx-3" to="/user">
+            <Link className="text-white mx-3" to="/user">
               Home
             </Link>
-          <Link className="text-white mx-3" to="/user/mybooking">
+            {role === "user" && <Link className="text-white mx-3" to="/user/mybooking">
               My Booking
-            </Link>
+            </Link>}
+            {role === "admin" && 
+             <>
+             <Link className="text-white mx-3" to="/admin/add">Add Movie</Link>
+             <Link className="text-white mx-3" to="/admin/collection">Collection</Link>
+             </>
+             }
+
             <br />
-           
+
             <div className="dropdown-center mx-3">
               <button
                 className="btn btn-secondary text-light"
                 type="button"
-               // onClick={handleLogout}
+                 onClick={handleLogout}
               >
-                {loading? <Loader size={5} color={"#fff"}/>: "Logout"}
+                {loading ? <Loader size={5} color={"#fff"} /> : "Logout"}
               </button>
-
             </div>
           </div>
         </div>
       </nav>
     </>
-  )
+  );
 }

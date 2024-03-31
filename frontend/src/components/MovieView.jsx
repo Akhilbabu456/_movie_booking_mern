@@ -1,65 +1,178 @@
+import { useToast } from "@chakra-ui/react";
 import "./MovieView.css";
 import { useState, useEffect } from "react";
 
-import { useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 
 const MovieView = () => {
-  const [movie, setMovie] = useState(null);
-  const [error, setError] = useState(null);
+  const [movie, setMovie] = useState([]);
+  let user = localStorage.getItem("token");
+  let detail = JSON.parse(localStorage.getItem("user"));
+  const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+  const toast = useToast();
+  const navigate = useNavigate()
+  // setRole(detail.data.role)
+  useEffect(() => {
+    setRole(detail?.data?.role || "");
+  }, [detail]);
 
-  const id = useParams().id;
+  const handleGet = async () => {
+    try {
+      setLoading(true);
+      let url = `https://movie-booking-mern.vercel.app/api/user/movie/${id}`;
+      let res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      });
+      let data = await res.json();
+      setLoading(false);
+      setMovie(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    // useEffect(() => {
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+      toast({
+        title: "Unauthorized",
+        status: "error",
+        duration: 2500,
+        isClosable: true,
+      });
+    }
+    handleGet();
+  }, []);
 
-    //   getData(`https://rancid-tomatillos.herokuapp.com/api/v2/movies/${id}`)
-    //     .then((data) => {
-    //       setMovie(data.movie);
-    //     })
-    //     .catch((error) => {
-    //       setError(error);
-    //     });
-    // }, []);
-
-//   const formatMoney = (value) => {
-//     if (value <= 500) {
-//       return "Not provided";
-//     } else {
-//       return value.toLocaleString("en-US", {
-//         style: "currency",
-//         currency: "USD",
-//       });
-//     }
-//   };
+  const handleDelete = async()=>{
+    setLoading(true)
+    try{
+       let url = `https://movie-booking-mern.vercel.app/api/admin/delete/${id}`
+      let res = await fetch(url, {
+         method: "POST",
+         headers:{
+           "Content-Type": "application/json",
+           "Authorization" :`${localStorage.getItem("token")}`
+         }
+       })
+       if(res.ok){
+        navigate("/user")
+         toast({
+          title: "Deleted",
+          description: "Movie Deleted Successfully",
+          status: "success",
+          duration: 2500,
+          isClosable: true,
+        })
+        setLoading(false)
+        
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   return (
     <>
+      {/* {movie.map((movies)=>{ */}
+
       <article className="details-page">
-        
         <img
-          src="https://images.hdqwalls.com/wallpapers/bthumb/avatar-the-way-of-the-water-2022-5k-u1.jpg"
+          src={movie.banner}
           //alt={`Backdrop Image for ${movie.title}`}
           className="backdrop-image"
         />
-        
+
         <div className="info">
           <img
-            src="https://images.hdqwalls.com/wallpapers/bthumb/avatar-the-way-of-the-water-2022-5k-u1.jpg"
+            src={movie.poster}
             //alt={`Cover Image for ${movie.title}`}
             className="cover-image"
           />
           <div className="movie-overview-section">
-            <h1 className="movie-title">Avatar</h1>
+            <h1 className="movie-title">{movie.title}</h1>
             <div className="date-and-runtime">
               <p>2024</p>
-              <p>2hr 45min</p>
-            <h3>✩ 8/10</h3>
+              <p>{movie.duration}</p>
+              <h3>✩{movie.rating}/10</h3>
             </div>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo ipsa vitae voluptatem. Impedit soluta explicabo corrupti omnis reiciendis deleniti! Fugiat quas aliquid mollitia. Hic, impedit distinctio. Provident dolores neque dolorum assumenda, laudantium, facere quaerat tenetur molestiae aut, voluptas esse eligendi in incidunt necessitatibus qui consequatur dolor sint modi numquam sed alias. Hic, ea? Explicabo, quas quaerat! Voluptas, quisquam saepe. Exercitationem dolores accusantium sint non sapiente optio dignissimos voluptate a dicta?</p>
-          <a href="/user/view/book" className="btn btn-primary">Book Ticket</a>
+            <p>{movie.description}</p>
+            {role === "user" && (
+              <Link to={`/user/view/book/${movie._id}`} className="btn btn-primary">
+                Book Ticket
+              </Link>
+            )}
+            {role === "admin" && (
+              <>
+                <Link
+                  to={`/admin/edit/${movie._id}`}
+                  className="btn btn-primary"
+                >
+                  Update
+                </Link>{" "}
+                <button type="button" className="btn btn-danger mx-1 my-1" data-bs-toggle="modal" data-bs-target="#exampleModal{{this._id}}" data-backdrop="false">
+                  Delete
+                </button>{" "}
+                <button className="btn btn-secondary">Disable</button>
+              </>
+            )}
+            <div
+              className="modal fade"
+              id="exampleModal{{this._id}}"
+              tabIndex="-1"
+              aria-labelledby="exampleModalLabel{{this._id}}"
+              aria-hidden="true"
+              data-backdrop="false"
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h1
+                      className="modal-title fs-5 text-secondary"
+                      id="exampleModalLabel{{this._id}}"
+                    >
+                      Delete option
+                    </h1>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body text-secondary">
+                    Are you sure to delete this item?
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={handleDelete}
+                      data-bs-dismiss="modal"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </article>
-      
+
+      {/* })} */}
     </>
   );
 };
