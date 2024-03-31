@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useToast } from '@chakra-ui/react'
 import { useNavigate } from "react-router-dom"
 import Loader from "./Loader"
@@ -25,7 +25,7 @@ const LoginCard = () => {
     e.preventDefault()
     setLoading(true)
     try{
-      const url = "http://localhost:3000/api/user/signup"
+      const url = "https://movie-booking-mern.vercel.app/api/user/signup"
       const res = await fetch(url,{
         method: "POST",
         headers: {
@@ -61,7 +61,7 @@ const LoginCard = () => {
 
       setTimeout(async()=>{
         console.log(id)
-        const response = await fetch(`http://localhost:3000/api/user/verify/${id}`, {
+        const response = await fetch(`https://movie-booking-mern.vercel.app/api/user/verify/${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -69,6 +69,7 @@ const LoginCard = () => {
         })
         if(response.status === 200){
           setLoading(false)
+          setAuthScreen("login")
           toast({
             title: "Account created successfully",
             description: "Please login",
@@ -93,6 +94,45 @@ const LoginCard = () => {
       
     }
    }
+
+   const handleLogin = async(e)=>{
+    e.preventDefault()
+    setLoading(true)
+  try{
+    const url = "https://movie-booking-mern.vercel.app/api/user/login"
+    const res = await fetch(url,{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(login),
+    })
+    let data = await res.json()
+   if(!res.error){
+    setLoading(false)
+     localStorage.setItem("token", data.token)
+    navigate("/user")
+    toast({
+      title: "Logged in successfully",
+      status: "success",
+      duration: 2500,
+      isClosable: true,
+    })
+   }else{
+    setLoading(false)
+    console.log(data)
+          toast({
+            title: data.errors,
+            status: "error",
+            duration: 2500,
+            isClosable: true,
+          })
+   } 
+  }catch(err){
+    console.log(err)
+  }
+      
+   }
   
   
 
@@ -114,7 +154,7 @@ const LoginCard = () => {
               onChange={(e)=>setLogin({...login,password:e.target.value})}/>
             </div>
             <button className="btn1 solid" 
-            //onClick={handleLogin}
+            onClick={handleLogin}
             >{loading? <Loader size={8} color={"#fff"}/>: "Login"}</button>
             
           </form>

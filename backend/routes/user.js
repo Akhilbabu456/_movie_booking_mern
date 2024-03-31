@@ -134,7 +134,7 @@ router.post("/login", [
           if(data && passwordCompare){
             const token = generateToken(data._id)
             res.json({
-              id: data._id,
+              data: data,
               token: token
           })
           }else{

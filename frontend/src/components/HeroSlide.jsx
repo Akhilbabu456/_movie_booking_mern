@@ -12,9 +12,9 @@ export default function App() {
         <div className="gradient-overlay"></div>
         </div>
         <MDBCarouselCaption>
-          <h1 className='heading'>First slide label</h1>
-          <p className='content'>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          <button className='btn'>
+          <h1 className='slider-heading'>First slide label</h1>
+          <p className='slider-content'>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+          <button className='trailer'>
             <Link>Watch Trailer</Link>
           </button>
         </MDBCarouselCaption>

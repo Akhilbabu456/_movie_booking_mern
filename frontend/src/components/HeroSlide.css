@@ -1,22 +1,24 @@
-.content{
+.slider-content{
     font-size: 17px;
     position: absolute;
     left: 30px;
     bottom: 140px;
 }
-.heading{
+.slider-heading{
     font-size: 50px;
     position: absolute;
     left: 10px;
     bottom: 170px;
 }
-.btn{
+.trailer{
     color: #fff;
     background-color: #000;
     border: 1px solid #fff;
     position: absolute;
     left: 30px;
     bottom: 30px;
+    padding: 6px;
+    border-radius: 7px;
 }
 .gradient-overlay {
     position: absolute;

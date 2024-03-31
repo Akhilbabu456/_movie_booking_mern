@@ -2,6 +2,11 @@ import { Link } from "react-router-dom";
 import "./MovieCard.css";
 
 const MovieCard = () => {
+
+  const handleGet = async()=>{
+    
+  }
+
   return (
     <>
       <div className="row">
