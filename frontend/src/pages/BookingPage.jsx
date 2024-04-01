@@ -265,7 +265,7 @@ const BookingPage = () => {
       });
       const order = await res.json();
       // console.log(order);
-
+      console.log(order)
       var options = {
         key: "",
         amount,
@@ -277,13 +277,14 @@ const BookingPage = () => {
         handler: async (res) => {
           const body = {
             ...res,
+            movieId: data._id,
             seats: booking.seats,
             time: booking.time,
             date: booking.date,
           };
           try {
             const res = await fetch(
-              `http://localhost:3000/api/user/validate/${data._id}`,
+              `http://localhost:3000/api/user/validate`,
               {
                 method: "POST",
                 headers: {

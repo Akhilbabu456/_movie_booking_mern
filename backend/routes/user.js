@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs")
 const router = express.Router()
 const crypto = require("crypto");
 const {body, validationResult} = require("express-validator")
-const razorpay = require('razorpay')
+const Razorpay = require('razorpay')
 const nodemailer = require('nodemailer')
 const generateToken = require("../config/generateToken");
 const verify = require("../models/verifyModel");
@@ -291,8 +291,8 @@ router.post("/order", authMiddleware, async (req, res) => {
   }
 })
 
-router.post("/validate/:id", authMiddleware, async (req, res) => {
-  const id = req.params.id
+router.post("/validate", authMiddleware, async (req, res) => {
+  // const id = req.params.id
   const {
     razorpay_order_id,
     razorpay_payment_id,
@@ -300,16 +300,19 @@ router.post("/validate/:id", authMiddleware, async (req, res) => {
     seats,
     time,
     date,
+    movieId
   } = req.body;
-  const movie = await Movie.findOne({_id: id})
+  const movie = await Movie.findOne({_id: movieId})
   const userId = req.user.id
   console.log(req.body);
 
   let bookingId;
   let user;
-
+ 
+ 
   try {
-    const sha = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET);
+  console.log("validation started")
+    const sha = crypto.createHmac("sha256", "dnNfgM4CtypK8ZemazFojhd3");
 
     //razorpay_order_id + " | " + razorpay_payment_id
     sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
@@ -319,9 +322,10 @@ router.post("/validate/:id", authMiddleware, async (req, res) => {
     if (digest !== razorpay_signature) {
       return res.status(400).json({ message: "Transaction is not legit!" });
     } else {
+      console.log("booking started")
       const booking = await new Booking({
         user : userId,
-        movie : id,
+        movie : movie._id,
         date ,
         time,
         seats
@@ -330,7 +334,7 @@ router.post("/validate/:id", authMiddleware, async (req, res) => {
       bookingId = booking._id;
 
       let collection = movie.collections + (movie.ticketPrice * seats)
-      await Movie.findByIdAndUpdate({_id: id}, {
+      await Movie.findByIdAndUpdate({_id: movie._id}, {
         collections: collection
       })
 
@@ -350,20 +354,24 @@ router.post("/validate/:id", authMiddleware, async (req, res) => {
       subject: 'Movie Booking Confirmation',
       text: `Dear ${req.user.name},
 
-      Your movie booking for movie ID ${id} has been successfully confirmed.
+      Your movie booking for movie ID ${movie._id} has been successfully confirmed.
       Your booking id ${booking._id}
 
       Payment Details:
       Amount: ${movie.ticketPrice * seats}
-      Payment ID: ${order.id}
-      Payment Status: ${order.status}
+      Payment ID: Receipt2
+      Payment Status: success
 
 
       Regards,
       Movie Booking Website`
     };
+    try{
 
-    await transporter.sendMail(mailOptions)
+      await transporter.sendMail(mailOptions)
+    }catch(err){
+      console.log(err)
+    }
 
     res.status(200).json({
       success: "Ticket booked succcessfully"
