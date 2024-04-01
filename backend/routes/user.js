@@ -367,10 +367,10 @@ router.post("/validate", authMiddleware, async (req, res) => {
       Movie Booking Website`
     };
       await transporter.sendMail(mailOptions)
-    
+     console.log(booking.id)
     res.status(200).json({
       success: "Ticket booked succcessfully",
-      bookingId: booking._id
+      bookingId
     })
     }
   }catch(err){

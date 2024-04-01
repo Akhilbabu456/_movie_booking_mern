@@ -284,7 +284,7 @@ const BookingPage = () => {
           };
           try {
             const res = await fetch(
-              `https://movie-booking-mern.vercel.app/api/user/validate`,
+              ` http://localhost:3000/api/user/validate`,
               {
                 method: "POST",
                 headers: {
@@ -294,8 +294,8 @@ const BookingPage = () => {
                 body: JSON.stringify(body),
               }
             );
-            let data = res.json();
-            console.log(data.bookingId)
+            let data = await res.json();
+            console.log(data)
             if (res.status === 200) {
               navigate(`/user/view/book/ticket/${data.bookingId}`);
               toast({
