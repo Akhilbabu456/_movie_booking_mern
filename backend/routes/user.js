@@ -13,24 +13,35 @@ const authMiddleware = require("../middleware/authMiddleware");
 const Movie = require("../models/movieModel");
 
 router.post("/signup",[
-    body("name")
-    .isLength({min: 3})
-    .withMessage("Enter valid name"),
-    body("email")
-    .isEmail()
-    .withMessage("Enter valid email"),
-    body("password")
-    .isLength({min: 5})
-    .withMessage("Password must be atleast 5 characters long"),
-    body("confirmPassword")
-    .isLength({min: 5})
-    .withMessage("Password must be atleast 5 characters long")
+  body("name")
+  .notEmpty()
+  .withMessage("Name is required")
+  .isLength({ min: 3 })
+  .withMessage("Enter valid name"),
+body("email")
+  .notEmpty()
+  .withMessage("Email is required")
+  .isEmail()
+  .withMessage("Enter valid email"),
+body("password")
+  .notEmpty()
+  .withMessage("Password is required")
+  .isLength({ min: 5 })
+  .withMessage("Password must be at least 5 characters long"),
+body("confirmPassword")
+  .notEmpty()
+  .withMessage("Confirm Password is required")
+  .isLength({ min: 5 })
+  .withMessage("Password must be at least 5 characters long"),
 ], async(req,res)=>{
     const errors = validationResult(req)
     if(!errors.isEmpty()){
         return res.status(400).json({errors: errors.array()})
     }else{
         const {name, email, password, confirmPassword} = req.body
+        if(password!==confirmPassword){
+           res.status(400).json({error: "Password and Confirm Password does not match"})
+        }
         const token = generateToken(email)
         const data = await User.findOne({email: email})
         if(data){
@@ -119,6 +130,8 @@ router.get('/verify-email/:id', async(req, res) => {
 
 router.post("/login", [
   body("email")
+  .notEmpty()
+  .withMessage("Email cannot be empty")
   .isEmail()
   .withMessage("Enter valid email"),
   body("password")
@@ -178,89 +191,6 @@ router.get("/movie/:id", authMiddleware, async(req,res)=>{
   }
 })
 
-
-// router.post("/movie/book/:id", authMiddleware, async(req,res)=>{
-//   const id = req.params.id
-//   const { date, time, seats} = req.body
-//   const userId = req.user.id
-//   const movie = await Movie.findOne({_id: id})
-//   try{
-//     const booking = await new Booking({
-//         user : userId,
-//         movie : id,
-//         date ,
-//         time,
-//         seats
-//     })
-//     await booking.save()
-
-//     const razorpayClient = new razorpay({
-//       key_id: 'rzp_test_7qtDyF7UTRLDBn',
-//       key_secret: 'dnNfgM4CtypK8ZemazFojhd3'
-//     })
-
-//     const order = await razorpayClient.orders.create({
-//        amount: (movie.ticketPrice * seats)*100,
-//        currency: 'INR',
-//        receipt: 'receipt#1',
-//        payment_capture: 1
-//     })
-
-//     let collection = movie.collections + (movie.ticketPrice * seats)
-
-//     if(order){
-//       await Movie.findByIdAndUpdate({_id: id}, {
-//         collections: collection
-//       })
-
-//       let transporter = nodemailer.createTransport({
-//         host: "smtp.gmail.com",
-//         port: 465,
-//         secure: true,
-//         auth: {
-//           user: "akhilbeliever001@gmail.com",
-//           pass: "prukmblhnwcenoco",
-//         }
-//       });
-
-//     const mailOptions = {
-//       from: "akhilbeliever001@gmail.com",
-//       to: req.user.email,
-//       subject: 'Movie Booking Confirmation',
-//       text: `Dear ${req.user.name},
-
-//       Your movie booking for movie ID ${id} has been successfully confirmed.
-//       Your booking id ${booking._id}
-
-//       Payment Details:
-//       Amount: ${movie.ticketPrice * seats}
-//       Payment ID: ${order.id}
-//       Payment Status: ${order.status}
-
-
-//       Regards,
-//       Movie Booking Website`
-//     };
-
-//     await transporter.sendMail(mailOptions)
-
-//     res.status(200).json({
-//       success: "Ticket booked succcessfully"
-//     })
-//     }else{
-//       await Booking.deleteOne({_id: booking._id})
-
-//       res.status(400).json({
-//         error: "Payment failed"	
-//       })
-//     }
-//   }catch(err){
-//     console.log(err)
-//     res.status(400).json({
-//       error: "Internal server error"
-//     })
-//   }
-// })
 
 router.post("/order", authMiddleware, async (req, res) => {
 

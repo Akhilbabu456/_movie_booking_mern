@@ -127,13 +127,13 @@ const EditMovie = () => {
     })
       if(response.status === 500){
         toast({
-          title: "Movie not added",
+          title: response.error,
           status: "error",
           duration: 2500,
           isClosable: true,
         })
       }else{
-        navigate("/user")
+        navigate("/admin")
          toast({
           title: "Movie Edited successfully",
           status: "success",
@@ -153,7 +153,7 @@ const EditMovie = () => {
               className="sign-in-form"
               
             >
-              <h2 className="title">Add Movie</h2>
+              <h2 className="title">Edit Movie</h2>
               <div className="input-field">
                 <i className="fas fa-user"></i>
                 <input

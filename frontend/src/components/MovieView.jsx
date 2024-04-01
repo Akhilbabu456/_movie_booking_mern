@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import "./MovieView.css";
 import { useState, useEffect } from "react";
 
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const MovieView = () => {
   const [movie, setMovie] = useState([]);

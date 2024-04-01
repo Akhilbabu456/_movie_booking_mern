@@ -307,7 +307,7 @@ const BookingPage = () => {
             } else {
               navigate("/user");
               toast({
-                title: "Booking failed",
+                title: data.error,
                 status: "error",
                 duration: 2500,
                 isClosable: true,

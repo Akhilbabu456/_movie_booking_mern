@@ -98,22 +98,33 @@ const AddMovie = () => {
       },
       body: JSON.stringify(newMovie),
     })
-      if(response.status === 500){
+    const data = response.json() 
+    if(response.status === 400) {
+      // Display validation errors as toasts
+      data.errors.forEach((error) => {
         toast({
-          title: "Movie not added",
+          title: error.msg,
           status: "error",
           duration: 2500,
           isClosable: true,
-        })
-      }else{
-        navigate("/user")
-         toast({
-          title: "Movie added successfully",
-          status: "success",
-          duration: 2500,
-          isClosable: true,
-        })
-      }
+        });
+      });
+    } else if(response.status === 500) {
+      toast({
+        title: data.error,
+        status: "error",
+        duration: 2500,
+        isClosable: true,
+      });
+    } else {
+      navigate("/admin")
+      toast({
+        title: "Movie added successfully",
+        status: "success",
+        duration: 2500,
+        isClosable: true,
+      });
+    }
   }
 
   return (
@@ -133,6 +144,7 @@ const AddMovie = () => {
                   type="text"
                   placeholder="Title"
                   value={newMovie.title}
+                  name= "title"
                   onChange={(e)=>{setNewMovie({...newMovie,title: e.target.value})}}
                 />
               </div>
@@ -140,6 +152,7 @@ const AddMovie = () => {
                 <i className="fas fa-user"></i>
                 <input
                   type="text"
+                  name="description"
                   placeholder="Description"
                   value={newMovie.description}
                   onChange={(e)=>{setNewMovie({...newMovie,description: e.target.value})}}
@@ -149,6 +162,7 @@ const AddMovie = () => {
                 <i className="fas fa-user"></i>
                 <input
                   type="text"
+                  name="duration"
                   placeholder="Duration"
                   value={newMovie.duration}
                   onChange={(e)=>{setNewMovie({...newMovie,duration: e.target.value})}}
@@ -158,6 +172,7 @@ const AddMovie = () => {
                 <i className="fas fa-user"></i>
                 <input
                   type="text"
+                  name="link"
                   placeholder="Trailer link"
                   value={newMovie.link}
                   onChange={(e)=>{setNewMovie({...newMovie,link: e.target.value})}}
@@ -168,6 +183,7 @@ const AddMovie = () => {
                 <input
                   type="number"
                   placeholder="Rating"
+                  name="rating"
                   value={newMovie.rating}
                   onChange={(e)=>{setNewMovie({...newMovie,rating: e.target.value})}}
                 />
@@ -176,6 +192,7 @@ const AddMovie = () => {
                 <i className="fas fa-user"></i>
                 <input
                   type="number"
+                  name="ticketPrice"
                   placeholder="Ticket Price"
                   value={newMovie.ticketPrice}
                   onChange={(e)=>{setNewMovie({...newMovie,ticketPrice: e.target.value})}}

@@ -125,9 +125,8 @@ const LoginCard = () => {
     })
    }else{
     setLoading(false)
-    console.log(data)
           toast({
-            title: data.errors,
+            title: detail.errors,
             status: "error",
             duration: 2500,
             isClosable: true,
