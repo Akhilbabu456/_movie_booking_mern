@@ -383,6 +383,68 @@ router.post("/validate", authMiddleware, async (req, res) => {
   
 })
 
+router.get("/ticket/:id", authMiddleware, async(req,res)=>{
+  let id = req.params.id
+  try{
+     let booking = await Booking.findOne({_id: id})
+     if(!booking){
+       res.status(400).json({
+        error: "Not Found"
+       })
+     }else{
+        res.status(200).json({
+           seats: booking.seats,
+           date: booking.date,
+           time: booking.time,
+           movie: booking.movie,
+           user: booking.user,
+           _id: booking.id
+        })
+     }
+  }catch(err){
+     console.log(err)
+     res.status(400).json({
+      error: "Internal server error"
+    })
+  }
+})
+
+
+router.get("/mybooking/:id", authMiddleware, async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    // Find all bookings for the user
+    const bookings = await Booking.find({ user: userId });
+
+    if (!bookings || bookings.length === 0) {
+      return res.status(400).json({ error: "No bookings found" });
+    }
+
+    // Populate movie details for each booking
+    const populatedBookings = await Promise.all(
+      bookings.map(async (booking) => {
+        const movie = await Movie.findById(booking.movie);
+        if (!movie) {
+          throw new Error("Movie not found");
+        }
+        return {
+          movieTitle: movie.title,
+          poster: movie.poster,
+          seats: booking.seats,
+          date: booking.date,
+          time: booking.time,
+          bookingId: booking._id
+        };
+      })
+    );
+
+    res.status(200).json({ populatedBookings });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 
 

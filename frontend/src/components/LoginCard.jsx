@@ -107,12 +107,16 @@ const LoginCard = () => {
       },
       body: JSON.stringify(login),
     })
-    let data = await res.json()
+    let detail = await res.json()
    if(!res.error){
     setLoading(false)
-     localStorage.setItem("token", `Bearer ${data.token}`)
-     localStorage.setItem("user", JSON.stringify(data))
-    navigate("/user")
+     localStorage.setItem("token", `Bearer ${detail.token}`)
+     localStorage.setItem("user", JSON.stringify(detail))
+     if(detail.data.role === "admin"){
+      navigate("/admin")
+     }else{
+       navigate("/user")
+     }
     toast({
       title: "Logged in successfully",
       status: "success",

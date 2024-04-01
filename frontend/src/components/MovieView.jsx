@@ -78,6 +78,37 @@ const MovieView = () => {
     }
   }
 
+  const handleDisable = async()=>{
+    try{
+      let url = `https://movie-booking-mern.vercel.app/api/admin/disable/${id}`
+      let res = await fetch(url, {
+        method: "POST",
+        headers:{
+          "Content-Type": "application/json",
+          "Authorization" :`${localStorage.getItem("token")}`
+        }
+      })
+      if(res.ok){
+        navigate("/admin")
+        toast({
+          title: "Movie disabled",
+          status: "success",
+          duration: 2500,
+          isClosable: true,
+        })
+      }else{
+        toast({
+          title: "Movie not disabled",
+          status: "success",
+          duration: 2500,
+          isClosable: true,
+        })
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
+
   return (
     <>
       {/* {movie.map((movies)=>{ */}
@@ -119,7 +150,7 @@ const MovieView = () => {
                 <button type="button" className="btn btn-danger mx-1 my-1" data-bs-toggle="modal" data-bs-target="#exampleModal{{this._id}}" data-backdrop="false">
                   Delete
                 </button>{" "}
-                <button className="btn btn-secondary">Disable</button>
+                <button className="btn btn-secondary" onClick={handleDisable}>Disable</button>
               </>
             )}
             <div

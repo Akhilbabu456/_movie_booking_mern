@@ -1,6 +1,6 @@
 import Header from "../components/Header"
 import HeroSlide from "../components/HeroSlide"
-import MovieCard from "../components/MovieCard"
+import MovieCardUser from "../components/MovieCardUser"
 
 
 const UserPage = () => {
@@ -8,7 +8,7 @@ const UserPage = () => {
     <>
         <Header/>
         <HeroSlide/>
-        <MovieCard/>
+        <MovieCardUser/>
     </>
   )
 }
