@@ -255,7 +255,7 @@ const BookingPage = () => {
     const receiptId = generateReceiptId();
 
     try {
-      const res = await fetch(`http://localhost:3000/api/user/order`, {
+      const res = await fetch(`https://movie-booking-mern.vercel.app/api/user/order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -284,7 +284,7 @@ const BookingPage = () => {
           };
           try {
             const res = await fetch(
-              `http://localhost:3000/api/user/validate`,
+              `https://movie-booking-mern.vercel.app/api/user/validate`,
               {
                 method: "POST",
                 headers: {
@@ -295,8 +295,9 @@ const BookingPage = () => {
               }
             );
             let data = res.json();
+            console.log(data.bookingId)
             if (res.status === 200) {
-              navigate("/user");
+              navigate(`/user/view/book/ticket/${data.bookingId}`);
               toast({
                 title: "Booking Successful",
                 status: "success",
@@ -304,7 +305,7 @@ const BookingPage = () => {
                 isClosable: true,
               });
             } else {
-              navigate("");
+              navigate("/user");
               toast({
                 title: "Booking failed",
                 status: "error",

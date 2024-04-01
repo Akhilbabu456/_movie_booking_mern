@@ -26,7 +26,7 @@ function App() {
       <Route exact path='/admin/add' element={<AddMovie/>}/>
       <Route exact path='/admin/edit/:id' element={<EditMovie />}/>
       <Route exact path='/admin/collection' element={<CollectionPage/>}/>
-      <Route exact path='/user/view/book/:id' element={<TicketPage bookingId="12345"
+      <Route exact path='/user/view/book/ticket/:id' element={<TicketPage bookingId="12345"
   numberOfSeats="2"
   name="John Doe"/>}/>
       

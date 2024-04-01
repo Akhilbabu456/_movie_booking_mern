@@ -366,22 +366,12 @@ router.post("/validate", authMiddleware, async (req, res) => {
       Regards,
       Movie Booking Website`
     };
-    try{
-
       await transporter.sendMail(mailOptions)
-    }catch(err){
-      console.log(err)
-    }
-
-    res.status(200).json({
-      success: "Ticket booked succcessfully"
-    })
     
-      await Booking.deleteOne({_id: booking._id})
-
-      res.status(400).json({
-        error: "Payment failed"	
-      })
+    res.status(200).json({
+      success: "Ticket booked succcessfully",
+      bookingId: booking._id
+    })
     }
   }catch(err){
     console.log(err)
