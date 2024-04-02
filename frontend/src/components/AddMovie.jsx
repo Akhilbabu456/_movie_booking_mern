@@ -90,7 +90,7 @@ const AddMovie = () => {
 
   const handleAddMovie = async (e) => {
     e.preventDefault();
-    let response = await fetch("https://movie-booking-mern.vercel.app/api/admin/add", {
+    let response = await fetch("http://localhost:3000/api/admin/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,15 +100,15 @@ const AddMovie = () => {
     })
     const data = response.json() 
     if(response.status === 400) {
-      // Display validation errors as toasts
-      data.errors.forEach((error) => {
+      
         toast({
-          title: error.msg,
+          title: "All fields are required",
           status: "error",
           duration: 2500,
           isClosable: true,
         });
-      });
+      
+     
     } else if(response.status === 500) {
       toast({
         title: data.error,
@@ -250,7 +250,7 @@ const AddMovie = () => {
           <div className="panel left-panel">
             <div className="content">
               <h3>Want to go Back</h3>
-              <Link to="/user" className="btn btn-dark justify-content-end">
+              <Link to="/admin" className="btn btn-dark justify-content-end">
                 {" "}
                 Back
               </Link>

@@ -36,7 +36,7 @@ body("confirmPassword")
 ], async(req,res)=>{
     const errors = validationResult(req)
     if(!errors.isEmpty()){
-        return res.status(400).json({errors: errors.array()})
+        return res.status(400).json({errors: errors})
     }else{
         const {name, email, password, confirmPassword} = req.body
         if(password!==confirmPassword){
@@ -140,7 +140,7 @@ router.post("/login", [
 ], async(req,res)=>{
   const errors = validationResult(req)
   if(!errors.isEmpty()){
-      return res.status(400).json({errors: errors.array()})
+      return res.status(400).json({errors: errors})
   }else{
       const data = await User.findOne({email: req.body.email})
       const passwordCompare = await bcrypt.compare(req.body.password, data.password)

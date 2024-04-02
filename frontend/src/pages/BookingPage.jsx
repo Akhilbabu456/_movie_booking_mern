@@ -265,7 +265,14 @@ const BookingPage = () => {
       });
       const order = await res.json();
       // console.log(order);
-      console.log(order)
+      if(order.error){
+        toast({
+          title: "All fields are required",
+          status: "error",
+          duration: 2500,
+          isClosable: true,
+        });
+      }
       var options = {
         key: "",
         amount,
@@ -307,7 +314,7 @@ const BookingPage = () => {
             } else {
               navigate("/user");
               toast({
-                title: data.error,
+                title: "Booking failed",
                 status: "error",
                 duration: 2500,
                 isClosable: true,
@@ -433,7 +440,18 @@ const BookingPage = () => {
           </div>
         </div>
 
-        {/* Panels-container */}
+        <div className="panels-container">
+          <div className="panel left-panel">
+            <div className="content">
+              <h3>Want to go Back</h3>
+              <Link to="/user" className="btn btn-dark justify-content-end">
+                {" "}
+                Back
+              </Link>
+            </div>
+            <img src="/add.png" className="image" alt="" />
+          </div>
+        </div>
       </div>
     </>
   );

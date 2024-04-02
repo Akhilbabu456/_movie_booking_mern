@@ -25,12 +25,13 @@ const TicketPage = () => {
 			}
 		})
 		const data = await response.json()
+		console.log(data)
+		movieDetail(data)
        await setTicket(data)
-	await movieDetail()
 	}
 
-	const movieDetail = async()=>{
-		const response = await fetch(`http://localhost:3000/api/user/movie/${ticket.movie}`, {
+	const movieDetail = async(id)=>{
+		const response = await fetch(`http://localhost:3000/api/user/movie/${id.movie}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",

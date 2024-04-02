@@ -25,7 +25,7 @@ const LoginCard = () => {
     e.preventDefault()
     setLoading(true)
     try{
-      const url = "https://movie-booking-mern.vercel.app/api/user/signup"
+      const url = "http://localhost:3000/api/user/signup"
       const res = await fetch(url,{
         method: "POST",
         headers: {
@@ -47,6 +47,24 @@ const LoginCard = () => {
           isClosable: true,
         })
       }else{
+        if(data.error){
+          setLoading(false)
+          toast({
+            title: data.error,
+            status: "error",
+            duration: 2500,
+            isClosable: true,
+          })
+        }else{
+          console.log(data.errors.errors[0].msg)
+          setLoading(false)
+          toast({
+            title: data.errors.errors[0].msg ,
+            status: "error",
+            duration: 2500,
+            isClosable: true,
+          })
+        }
         setLoading(false)
         if(data.errors.name || data.errors.email || data.errors.password || data.errors.password_confirmation){
           toast({
@@ -99,7 +117,7 @@ const LoginCard = () => {
     e.preventDefault()
     setLoading(true)
   try{
-    const url = "https://movie-booking-mern.vercel.app/api/user/login"
+    const url = "http://localhost:3000/api/user/login"
     const res = await fetch(url,{
       method: "POST",
       headers: {
@@ -108,7 +126,8 @@ const LoginCard = () => {
       body: JSON.stringify(login),
     })
     let detail = await res.json()
-   if(!res.error){
+    console.log(detail.error)
+   if(res.status === 200){
     setLoading(false)
      localStorage.setItem("token", `Bearer ${detail.token}`)
      localStorage.setItem("user", JSON.stringify(detail))
@@ -124,13 +143,36 @@ const LoginCard = () => {
       isClosable: true,
     })
    }else{
-    setLoading(false)
+    if(detail.error){
+      setLoading(false)
           toast({
-            title: detail.errors,
+            title: detail.error,
             status: "error",
             duration: 2500,
             isClosable: true,
           })
+    }else{
+      console.log(detail.errors.errors[0].msg)
+       if(detail.errors.errors[0].path === "email"){
+         setLoading(false)
+               toast({
+                 title: detail.errors.errors[0].msg,
+                 status: "error",
+                 duration: 2500,
+                 isClosable: true,
+               })
+
+       }else{
+
+         setLoading(false)
+               toast({
+                 title: detail.errors.errors[0].msg,
+                 status: "error",
+                 duration: 2500,
+                 isClosable: true,
+               })
+       }
+    }
    } 
   }catch(err){
     console.log(err)

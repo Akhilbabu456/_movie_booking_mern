@@ -127,7 +127,7 @@ const EditMovie = () => {
     })
       if(response.status === 500){
         toast({
-          title: response.error,
+          title: "Please select date",
           status: "error",
           duration: 2500,
           isClosable: true,
@@ -260,7 +260,7 @@ const EditMovie = () => {
           <div className="panel left-panel">
             <div className="content">
               <h3>Want to go Back</h3>
-              <Link to="/user" className="btn btn-dark justify-content-end">
+              <Link to="/admin" className="btn btn-dark justify-content-end">
                 {" "}
                 Back
               </Link>
