@@ -4,6 +4,7 @@ import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
 import { BarChart } from '@saas-ui/charts'
 import Header from '../components/Header'
 import { useEffect, useState } from 'react';
+import Loader from '../components/Loader';
 
 const valueFormatter = (value) => {
   return new Intl.NumberFormat('en-US', {
@@ -13,10 +14,12 @@ const valueFormatter = (value) => {
 }
 
 export default function CollectionPage() {
+  const [loading, setLoading] = useState(false)
   const [collectionData, setCollectionData] = useState([]);
 
   useEffect(() => {
     const handleGet = async () => {
+      setLoading(true)
       try {
         const res = await fetch("https://movie-booking-mern.vercel.app/api/user/movie", {
           method: "GET",
@@ -26,6 +29,7 @@ export default function CollectionPage() {
           },
         });
         const data = await res.json();
+        setLoading(false)
         const collections = data.map(movie => ({
           // Assuming the title field in your movie model represents the collection name
           date: movie.title, // Assuming the date field in your movie model represents the collection date
@@ -43,6 +47,7 @@ export default function CollectionPage() {
   return (
     <>
       <Header/>
+      {loading && <Loader/>}
       <Card>
         <CardHeader pb="0">
           <Heading as="h4" fontWeight="medium" size="md">

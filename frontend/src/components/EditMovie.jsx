@@ -2,7 +2,8 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UploadWidget from "../hooks/UploadWidget";
-import { useToast } from "@chakra-ui/react";
+import { Button, Stack, useColorModeValue, useToast } from "@chakra-ui/react";
+import Loader from "./Loader";
 
 
 
@@ -10,6 +11,9 @@ const EditMovie = () => {
   const token = localStorage.getItem("token")
   const navigate = useNavigate()
    const toast = useToast()
+   const [loading, setLoading] = useState(false)
+   const [selected, setSelected] = useState(null);
+  const bgColor = useColorModeValue("green.200", "green.700");
   const [date, setDate] = useState([])
   const{ id }= useParams();
   //const [movieDate, setMovieDate] = useState([])
@@ -38,7 +42,7 @@ const EditMovie = () => {
       })
     }else{
         const getMovieData = async () => {
-            //setLoading(true)
+            setLoading(true)
             try {
             
               const response = await fetch(
@@ -51,7 +55,7 @@ const EditMovie = () => {
                   },
                 }
               );
-             //setLoading(false)
+             setLoading(false)
               let data = await response.json()
               console.log(data)
               setNewMovie(data)
@@ -117,6 +121,7 @@ const EditMovie = () => {
 
   const handleEditMovie = async (e) => {
     e.preventDefault();
+    setLoading(true)
     let response = await fetch(`https://movie-booking-mern.vercel.app/api/admin/edit/${id}`, {
       method: "POST",
       headers: {
@@ -125,6 +130,7 @@ const EditMovie = () => {
       },
       body: JSON.stringify(newMovie),
     })
+    setLoading(false)
       if(response.status === 500){
         toast({
           title: "Please select date",
@@ -208,7 +214,7 @@ const EditMovie = () => {
                   onChange={(e)=>{setNewMovie({...newMovie,ticketPrice: e.target.value})}}
                 />
               </div>
-              <div className="input-field">
+              {/* <div className="input-field">
                 <p>Dates:</p>
                 <div className="d-flex">
                 <button onClick={() => setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[0]] }))} className="btn btn-primary p-1 me-1">{date[0]}</button>
@@ -220,7 +226,81 @@ const EditMovie = () => {
                 <button onClick={() => setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[6]] }))} className="btn btn-primary p-1 me-1">{date[6]}</button>
                 </div>
                
-              </div>
+              </div> */}
+
+<Stack  m={{ base: 2, md: 3, xl: 4 }}  display={{base: "flex", sm:"flex", md: "block", xl: "flex", "2xl": "block",}}>
+                <p>Dates:</p>
+                  <Button
+                 m={1}
+                  bg={selected === 0 ? bgColor : "blue.400"}
+                  color={"black"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[0]] }))
+                  setSelected((prev) => (prev === 0 ? null : 0));
+                }}
+                  >
+                    {date[0]}
+                  </Button>
+                  <Button
+                 m={1}
+                  bg={selected === 1 ? bgColor : "blue.400"}
+                  color={"black"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[1]] }))
+                  setSelected((prev) => (prev === 1 ? null : 1));
+                }}
+                  >
+                    {date[1]}
+                  </Button>
+                  <Button
+                 m={1}
+                  bg={selected === 2 ? bgColor : "blue.400"}
+                  color={"black"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[2]] }))
+                  setSelected((prev) => (prev === 2 ? null : 2));
+                }}
+                  >
+                    {date[2]}
+                  </Button>
+                  <Button
+                 m={1}
+                  bg={selected === 3 ? bgColor : "blue.400"}
+                  color={"black"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[3]] }))
+                  setSelected((prev) => (prev === 3 ? null : 3));
+                }}
+                  >
+                    {date[3]}
+                  </Button>
+                  <Button
+                 m={1}
+                  bg={selected === 4 ? bgColor : "blue.400"}
+                  color={"black"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[4]] }))
+                  setSelected((prev) => (prev === 4 ? null : 4));
+                }}
+                  >
+                    {date[4]}
+                  </Button>
+                  <Button
+                 m={1}
+                  bg={selected === 5 ? bgColor : "blue.400"}
+                  color={"black"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[5]] }))
+                  setSelected((prev) => (prev === 5 ? null : 5));
+                }}
+                  >
+                    {date[5]}
+                  </Button>
+                  <Button
+                 m={1}
+                  bg={selected === 6 ? bgColor : "blue.400"}
+                  color={"black"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[6]] }))
+                  setSelected((prev) => (prev === 6 ? null : 6));
+                }}
+                  >
+                    {date[6]}
+                  </Button>
+                </Stack>
               
 
               <label htmlFor="poster" style={{fontSize: "20px", fontWeight: "20px", marginTop: "16px"}}>Poster:</label>
@@ -249,9 +329,9 @@ const EditMovie = () => {
                 }}
               </UploadWidget>
 
-              <button onClick={handleEditMovie} className="btn1 solid">Edit Movie </button>
-              {/* //</form>onClick={handleAddMed}>{loading? <Loader size={8} color={"#fff"}/>: "Add Medicine"}
-             </button> */}
+              <button onClick={handleEditMovie} className="btn1 solid">
+              {loading? <Loader size={8} color={"#fff"}/>: "Edit Movie"}
+             </button>
             </form>
           </div>
         </div>

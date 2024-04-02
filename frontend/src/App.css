@@ -11,6 +11,9 @@
     background: #2875cc;
     border: none;
   }
+  .navbar-brand{
+    width: 90px;
+  }
   .btn-primary{
     width: 120px;
   }

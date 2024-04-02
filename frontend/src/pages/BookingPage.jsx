@@ -158,12 +158,13 @@
 
 // export default BookingPage
 
-import React, { useState, useEffect } from "react";
-import { Button, useColorModeValue, useToast, HStack } from "@chakra-ui/react";
+import  { useState, useEffect } from "react";
+import { Button, useColorModeValue, useToast, Stack } from "@chakra-ui/react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
+import Loader from "../components/Loader";
 
-import TicketPage from "./TicketPage";
+
 
 const BookingPage = () => {
   const user = localStorage.getItem("token");
@@ -173,14 +174,17 @@ const BookingPage = () => {
     seats: "",
   });
   const [selected, setSelected] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [data, setData] = useState({});
   const [movie, setMovie] = useState([]);
+  const [loading, setLoading] = useState(false)
   const bgColor = useColorModeValue("green.200", "green.700");
   const toast = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
   
   const handleData = async()=>{
+    setLoading(true)
     let url = `https://movie-booking-mern.vercel.app/api/user/movie/${id}`;
     let res = await fetch(url, {
       method: "GET",
@@ -190,10 +194,12 @@ const BookingPage = () => {
       },
     });
     let data = await res.json();
+    setLoading(false)
     setData(data)
   }
   
   const handleGet = async () => {
+    setLoading(true)
     try {
       let url = `https://movie-booking-mern.vercel.app/api/user/movie/${id}`;
       let res = await fetch(url, {
@@ -204,6 +210,7 @@ const BookingPage = () => {
         },
       });
       let data = await res.text();
+      setLoading(false)
       console.log("Response data:", data); // Log the response data
   
       try {
@@ -240,7 +247,7 @@ const BookingPage = () => {
 
   const handleBooking = async (e) => {
     e.preventDefault();
-
+    setLoading(true)
     const generateReceiptId = () => {
       // Generate a random string
       const randomString = Math.random().toString(36).substring(7);
@@ -302,6 +309,7 @@ const BookingPage = () => {
               }
             );
             let data = await res.json();
+            setLoading(false)
             console.log(data)
             if (res.status === 200) {
               navigate(`/user/view/book/ticket/${data.bookingId}`);
@@ -356,31 +364,45 @@ const BookingPage = () => {
 
   return (
     <>
-      <Header />
       <div className="container1">
         <div className="forms-container">
           <div className="signin-signup">
             <form action="#" className="sign-in-form">
               <h2 className="title">Book Ticket</h2>
-              <div className="input-field">
+              {/* <div className="input-field"> */}
+                <Stack  m={{ base: 2, md: 3, xl: 4 }}  display={{base: "flex", sm:"flex", md: "block", xl: "flex", "2xl": "block",}}>
                 <p>Dates:</p>
-                <div className="d-flex">
                   {Array.isArray(movie) &&
                     movie.map((date, index) => (
-                      <button
-                        key={index}
-                        onClick={() =>
-                          setBooking((prevState) => ({ ...prevState, date }))
-                        }
-                        className="btn btn-primary p-1 me-1"
-                      >
-                        {date}
-                      </button>
+                      // <button
+                      //   key={index}
+                      //   onClick={() =>
+                      //     setBooking((prevState) => ({ ...prevState, date }))
+                      //   }
+                      //   className="btn btn-primary p-1 me-1"
+                      // >
+                      //   {date}
+                      // </button>
+                      
+                      <Button
+                      key={index}
+                      m={1}
+                      bg={selectedDate === index ? bgColor : "blue.400"}
+                      color={"black"}
+                      onClick={() => {
+                        setSelectedDate((prev) => (prev === index ? null : index));
+                        setBooking((prevState) => ({ ...prevState, date }))
+                      }}
+                    >
+                      {date}
+                    </Button>
                     ))}
-                </div>
-              </div>
-              <HStack m={7}>
+                </Stack>
+              {/* </div> */}
+              <Stack  m={{ base: 2, md: 3, xl: 4 }}  display={{base: "flex", sm:"flex", md: "block", xl: "flex", "2xl": "block",}}>
+                <p>Time:</p>
                 <Button
+                 m={1}
                   bg={selected === 0 ? bgColor : "blue.400"}
                   color={"black"}
                   onClick={() => {
@@ -391,6 +413,7 @@ const BookingPage = () => {
                   11.30 am
                 </Button>
                 <Button
+                m={1}
                   bg={selected === 1 ? bgColor : "blue.400"}
                   color={"black"}
                   onClick={() => {
@@ -401,6 +424,7 @@ const BookingPage = () => {
                   2.30 pm
                 </Button>
                 <Button
+                m={1}
                   bg={selected === 2 ? bgColor : "blue.400"}
                   color={"black"}
                   onClick={() => {
@@ -411,6 +435,7 @@ const BookingPage = () => {
                   5.00 pm
                 </Button>
                 <Button
+                m={1}
                   bg={selected === 3 ? bgColor : "blue.400"}
                   color={"black"}
                   onClick={() => {
@@ -420,7 +445,7 @@ const BookingPage = () => {
                 >
                   9.00 pm
                 </Button>
-              </HStack>
+              </Stack>
               <div className="input-field">
                 <i className="fas fa-user"></i>
                 <input
@@ -434,7 +459,7 @@ const BookingPage = () => {
               </div>
 
               <button className="btn1 solid" onClick={handleBooking}>
-                Book Ticket
+              {loading? <Loader size={8} color={"#fff"}/>: "Book Ticket"}
               </button>
             </form>
           </div>

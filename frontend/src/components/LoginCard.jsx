@@ -25,7 +25,7 @@ const LoginCard = () => {
     e.preventDefault()
     setLoading(true)
     try{
-      const url = "http://localhost:3000/api/user/signup"
+      const url = "https://movie-booking-mern.vercel.app/api/user/signup"
       const res = await fetch(url,{
         method: "POST",
         headers: {
@@ -117,7 +117,7 @@ const LoginCard = () => {
     e.preventDefault()
     setLoading(true)
   try{
-    const url = "http://localhost:3000/api/user/login"
+    const url = "https://movie-booking-mern.vercel.app/api/user/login"
     const res = await fetch(url,{
       method: "POST",
       headers: {

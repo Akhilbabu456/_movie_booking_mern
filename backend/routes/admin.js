@@ -8,11 +8,9 @@ const { body, validationResult } = require("express-validator");
 router.post("/add", authMiddleware,
 [
     body("title").notEmpty().withMessage("Title is required"),
-    body("description").notEmpty().withMessage("Description is required").isLength({max: 150}).withMessage("Description length should be less than 150"),
+    body("description").notEmpty().withMessage("Description is required"),
     body("rating").notEmpty().withMessage("Rating is required"),
     body("link").notEmpty().withMessage("Link is required"),
-    body("poster").notEmpty().withMessage("Poster is required"),
-    body("banner").notEmpty().withMessage("Banner is required"),
     body("ticketPrice")
       .notEmpty()
       .withMessage("Ticket Price is required")
@@ -21,7 +19,6 @@ router.post("/add", authMiddleware,
     body("duration")
       .notEmpty()
       .withMessage("Duration is required"), 
-    body("dates").notEmpty().withMessage("Dates are required"),
   ],  async(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -51,22 +48,15 @@ router.post("/add", authMiddleware,
 
 router.post("/edit/:id", authMiddleware,[
     body("title").notEmpty().withMessage("Title is required"),
-    body("description").notEmpty().withMessage("Description is required").isLength({max: 150}).withMessage("Description length should be less than 150"),
+    body("description").notEmpty().withMessage("Description is required"),
     body("rating").notEmpty().withMessage("Rating is required"),
     body("link").notEmpty().withMessage("Link is required"),
-    body("poster").notEmpty().withMessage("Poster is required"),
-    body("banner").notEmpty().withMessage("Banner is required"),
     body("ticketPrice")
       .notEmpty()
-      .withMessage("Ticket Price is required")
-      .isNumeric()
-      .withMessage("Ticket Price must be a number"),
+      .withMessage("Ticket Price is required"),
     body("duration")
       .notEmpty()
       .withMessage("Duration is required")
-      .isNumeric()
-      .withMessage("Duration must be a number"),
-    body("dates").notEmpty().withMessage("Dates are required"),
   ],  async(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

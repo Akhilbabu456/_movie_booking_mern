@@ -7,6 +7,7 @@ const AdminPage = () => {
     <div>
         <Header/>
         <HeroSlide/>
+        <h1 className="heading mt-4">Popular movies</h1>
         <MovieCard/>
     </div>
   )

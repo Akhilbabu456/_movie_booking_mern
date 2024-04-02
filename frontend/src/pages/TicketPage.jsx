@@ -5,6 +5,7 @@ import "./TicketPage.css"
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useToast } from "@chakra-ui/react";
+import Loader from "../components/Loader";
 
 
 const TicketPage = () => {
@@ -12,12 +13,14 @@ const TicketPage = () => {
     const {id} = useParams()
 	const navigate = useNavigate()
 	const toast = useToast()
+	const [loading, setLoading] = useState(false)
 	const [ticket, setTicket] = useState([])
 	const [movieData, setMovieData] = useState([])
 	console.log(ticket.movie)
 
 	const ticketDetail = async()=>{
-		const response = await fetch(`http://localhost:3000/api/user/ticket/${id}`, {
+		setLoading(true)
+		const response = await fetch(`https://movie-booking-mern.vercel.app/api/user/ticket/${id}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -25,13 +28,15 @@ const TicketPage = () => {
 			}
 		})
 		const data = await response.json()
+		setLoading(false)
 		console.log(data)
 		movieDetail(data)
        await setTicket(data)
 	}
 
 	const movieDetail = async(id)=>{
-		const response = await fetch(`http://localhost:3000/api/user/movie/${id.movie}`, {
+		setLoading(true)
+		const response = await fetch(`https://movie-booking-mern.vercel.app/api/user/movie/${id.movie}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -39,6 +44,7 @@ const TicketPage = () => {
 			}
 		})
 		const data = await response.json()
+		setLoading(false)
         setMovieData(data)
 	}
 
@@ -64,6 +70,7 @@ const TicketPage = () => {
   return (
     <>
     <Header/>
+	{loading && <Loader/>}
     <link rel="stylesheet"
              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 

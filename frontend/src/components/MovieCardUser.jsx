@@ -46,13 +46,14 @@ const MovieCardUser = () => {
   }, []);
 
   return (
-    <>
+    <div className="container-fluid">
+    
       {loading && <Loader />}
-      <div className="row">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-2 ">
         {movieList.map((movie) => {
           return (
-            <div key={movie._id} className="col-md-2 col-sm-6 col-xs-12">
-              <div className="movie-card">
+            <div key={movie._id} className="col mb-4 d-flex justify-content-center">
+              <div className="movie-card m-0">
                 <img src={movie.poster} alt="Avatar wallpaper" />
                 <h3>{movie.title}</h3>
                 <div className="content">
@@ -69,7 +70,7 @@ const MovieCardUser = () => {
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 

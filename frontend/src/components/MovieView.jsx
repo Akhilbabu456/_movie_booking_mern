@@ -3,6 +3,7 @@ import "./MovieView.css";
 import { useState, useEffect } from "react";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
+import Loader from "./Loader";
 
 const MovieView = () => {
   const [movie, setMovie] = useState([]);
@@ -79,6 +80,7 @@ const MovieView = () => {
   }
 
   const handleDisable = async()=>{
+    setLoading(true)
     try{
       let url = `https://movie-booking-mern.vercel.app/api/admin/disable/${id}`
       let res = await fetch(url, {
@@ -88,6 +90,7 @@ const MovieView = () => {
           "Authorization" :`${localStorage.getItem("token")}`
         }
       })
+      setLoading(false)
       if(res.ok){
         navigate("/admin")
         toast({
@@ -111,7 +114,7 @@ const MovieView = () => {
 
   return (
     <>
-      {/* {movie.map((movies)=>{ */}
+     {loading && <Loader/>}
 
       <article className="details-page">
         <img
@@ -136,7 +139,7 @@ const MovieView = () => {
             <p>{movie.description}</p>
             {role === "user" && (
               <Link to={`/user/view/book/${movie._id}`} className="btn btn-primary">
-                Book Ticket
+                 {loading? <Loader size={8} color={"#fff"}/>: "Book Ticket"}
               </Link>
             )}
             {role === "admin" && (
@@ -145,12 +148,12 @@ const MovieView = () => {
                   to={`/admin/edit/${movie._id}`}
                   className="btn btn-primary"
                 >
-                  Update
+                  {loading? <Loader size={8} color={"#fff"}/>: "Update"}
                 </Link>{" "}
                 <button type="button" className="btn btn-danger mx-1 my-1" data-bs-toggle="modal" data-bs-target="#exampleModal{{this._id}}" data-backdrop="false">
                   Delete
                 </button>{" "}
-                <button className="btn btn-secondary" onClick={handleDisable}>Disable</button>
+                <button className="btn btn-secondary" onClick={handleDisable}> {loading? <Loader size={8} color={"#fff"}/>: "Disable"}</button>
               </>
             )}
             <div
@@ -193,7 +196,7 @@ const MovieView = () => {
                       onClick={handleDelete}
                       data-bs-dismiss="modal"
                     >
-                      Delete
+                      {loading? <Loader size={8} color={"#fff"}/>: "Delete"}
                     </button>
                   </div>
                 </div>

@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import generatePDF from "react-to-pdf";
 
 import PdfPage from "./PdfPage";
+import Loader from "../components/Loader";
 
 const MyBookingPage = () => {
   const options = {
@@ -38,7 +39,7 @@ const MyBookingPage = () => {
   const myBooking = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/user/mybooking/${user.data._id}`,
+        `https://movie-booking-mern.vercel.app/api/user/mybooking/${user.data._id}`,
         {
           method: "GET",
           headers: {
@@ -81,14 +82,12 @@ const MyBookingPage = () => {
     }
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  
 
   return (
     <>
       <Header />
-
+ {loading && <Loader/>}
       {bookings.length > 0 ? (
         bookings.map((booking, index) => (
           <Card
@@ -172,7 +171,7 @@ const MyBookingPage = () => {
           </Card>
         ))
       ) : (
-        <div>No bookings found</div>
+        <div className="m-5 justify-content-center">No bookings found</div>
       )}
     </>
   );
