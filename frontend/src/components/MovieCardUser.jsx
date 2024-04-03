@@ -55,13 +55,16 @@ const MovieCardUser = () => {
             <div key={movie._id} className="col mb-4 d-flex justify-content-center">
               <div className="movie-card m-0">
                 <img src={movie.poster} alt="Avatar wallpaper" />
-                <h3>{movie.title}</h3>
+               
+                <div className="overlay"></div>
                 <div className="content">
                   <h1>{movie.title}</h1>
                   <div className="infos">
-                    <span>·&nbsp;&nbsp;2022&nbsp;&nbsp;·&nbsp;&nbsp;{movie.duration}</span>
+                    <span className="ms-5">&nbsp;&nbsp;&nbsp;📅2024&nbsp;&nbsp;&nbsp;&nbsp;⌛{movie.duration}</span>
+                    
                   </div>
-                  <Link to={`/user/view/${movie._id}`} className="btn">
+                  <h5 className="rating">⭐{movie.rating}/10</h5>
+                  <Link to={`/user/view/${movie._id}`} className="btn mt-5">
                     View
                   </Link>
                 </div>

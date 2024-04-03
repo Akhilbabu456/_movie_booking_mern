@@ -8,7 +8,8 @@ import {
   Image,
   Text,
   useToast,
-} from "@chakra-ui/react";
+} from "@chakra-ui/react";0
+
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -105,17 +106,18 @@ const MyBookingPage = () => {
               objectFit="cover"
               maxW={{ base: "100%", sm: "200px" }}
               src={booking.poster} // Use the poster from booking data
-              alt={booking.movieTitle} // Use the movie title as alt text
+              alt={booking.movieTitle} 
+              filter='auto' brightness='70%'// Use the movie title as alt text
             />
 
             <HStack>
-              <CardBody display="flex" justifyContent="space-between">
+              <CardBody display="flex" gap={{base:'23px', sm: "60px", md: "300px", lg: "400px", xl: "600px"}} justifyContent='space-evenly'>
                 <Box>
                   <Heading size="md">{booking.movieTitle}</Heading>{" "}
                   {/* Use movie title */}
                   <Text py="2">
-                    Seats: {booking.seats}, Date: {booking.date}, Time:{" "}
-                    {booking.time}
+                    Seats: {booking.seats},&nbsp;  📅: {booking.date}, 
+                    &nbsp;⌛: {booking.time}
                   </Text>
                 </Box>
                 <Box ml={15}>
@@ -135,9 +137,10 @@ const MyBookingPage = () => {
                     Download Ticket
                   </button> */}
                 </Box>
+
                 <div className="modal fade" id={`exampleModal${index}`} aria-hidden="true" data-backdrop="false">
                   <div className="modal-dialog">
-                    <div className="modal-content">
+                    <div className="modal-content bg-dark">
                       <div className="modal-header">
                         <h1 className="modal-title fs-5 text-secondary" id={`exampleModalLabel${index}`}>Download Ticket</h1>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -166,9 +169,10 @@ const MyBookingPage = () => {
                     </div>
                   </div>
                 </div>
-              </CardBody>
+       
+               </CardBody>
             </HStack>
-          </Card>
+          </Card> 
         ))
       ) : (
         <div className="m-5 justify-content-center">No bookings found</div>

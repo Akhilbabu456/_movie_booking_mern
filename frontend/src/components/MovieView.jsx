@@ -11,6 +11,8 @@ const MovieView = () => {
   let detail = JSON.parse(localStorage.getItem("user"));
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [disableLoading, setDisableLoading] = useState(false);
   const { id } = useParams();
   const toast = useToast();
   const navigate = useNavigate()
@@ -52,7 +54,7 @@ const MovieView = () => {
   }, []);
 
   const handleDelete = async()=>{
-    setLoading(true)
+    setDeleteLoading(true)
     try{
        let url = `https://movie-booking-mern.vercel.app/api/admin/delete/${id}`
       let res = await fetch(url, {
@@ -71,7 +73,7 @@ const MovieView = () => {
           duration: 2500,
           isClosable: true,
         })
-        setLoading(false)
+        setDeleteLoading(false)
         
       }
     }catch(err){
@@ -80,7 +82,7 @@ const MovieView = () => {
   }
 
   const handleDisable = async()=>{
-    setLoading(true)
+    setDisableLoading(true)
     try{
       let url = `https://movie-booking-mern.vercel.app/api/admin/disable/${id}`
       let res = await fetch(url, {
@@ -90,7 +92,7 @@ const MovieView = () => {
           "Authorization" :`${localStorage.getItem("token")}`
         }
       })
-      setLoading(false)
+      setDisableLoading(false)
       if(res.ok){
         navigate("/admin")
         toast({
@@ -132,9 +134,9 @@ const MovieView = () => {
           <div className="movie-overview-section">
             <h1 className="movie-title">{movie.title}</h1>
             <div className="date-and-runtime">
-              <p>2024</p>
-              <p>{movie.duration}</p>
-              <h3>✩{movie.rating}/10</h3>
+              <p>📅2024</p>
+              <p>⌛{movie.duration}</p>
+              <h3>⭐{movie.rating}/10</h3>
             </div>
             <p>{movie.description}</p>
             {role === "user" && (
@@ -153,7 +155,7 @@ const MovieView = () => {
                 <button type="button" className="btn btn-danger mx-1 my-1" data-bs-toggle="modal" data-bs-target="#exampleModal{{this._id}}" data-backdrop="false">
                   Delete
                 </button>{" "}
-                <button className="btn btn-secondary" onClick={handleDisable}> {loading? <Loader size={8} color={"#fff"}/>: "Disable"}</button>
+                <button className="btn btn-secondary" onClick={handleDisable}> {disableLoading? <Loader size={8} color={"#fff"}/>: "Disable"}</button>
               </>
             )}
             <div
@@ -196,7 +198,7 @@ const MovieView = () => {
                       onClick={handleDelete}
                       data-bs-dismiss="modal"
                     >
-                      {loading? <Loader size={8} color={"#fff"}/>: "Delete"}
+                      {deleteLoading? <Loader size={8} color={"#fff"}/>: "Delete"}
                     </button>
                   </div>
                 </div>

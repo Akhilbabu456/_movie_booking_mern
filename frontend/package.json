@@ -48,7 +48,8 @@
     "react-to-pdf": "^1.0.1",
     "reactjs-social-login": "^2.6.3",
     "request": "^2.88.2",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "swiper": "^11.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

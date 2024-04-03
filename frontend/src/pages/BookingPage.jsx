@@ -159,7 +159,7 @@
 // export default BookingPage
 
 import  { useState, useEffect } from "react";
-import { Button, useColorModeValue, useToast, Stack } from "@chakra-ui/react";
+import { Button, useColorModeValue, useToast, Stack, VStack, HStack } from "@chakra-ui/react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Loader from "../components/Loader";
@@ -178,7 +178,7 @@ const BookingPage = () => {
   const [data, setData] = useState({});
   const [movie, setMovie] = useState([]);
   const [loading, setLoading] = useState(false)
-  const bgColor = useColorModeValue("green.200", "green.700");
+  const bgColor = useColorModeValue("green.200", "green.500");
   const toast = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -370,82 +370,106 @@ const BookingPage = () => {
             <form action="#" className="sign-in-form">
               <h2 className="title">Book Ticket</h2>
               {/* <div className="input-field"> */}
-                <Stack  m={{ base: 2, md: 3, xl: 4 }}  display={{base: "flex", sm:"flex", md: "block", xl: "flex", "2xl": "block",}}>
-                <p>Dates:</p>
+              <h6 className="mt-4 mb-2">Dates:</h6>
+                <HStack  m={{ base: 1, md: 2, xl: 4 }} 
+                 >
                   {Array.isArray(movie) &&
-                    movie.map((date, index) => (
-                      // <button
-                      //   key={index}
-                      //   onClick={() =>
-                      //     setBooking((prevState) => ({ ...prevState, date }))
-                      //   }
-                      //   className="btn btn-primary p-1 me-1"
-                      // >
-                      //   {date}
-                      // </button>
-                      
+                    movie.map((date, index) => {
+                      const parts = date.split("-");
+                      const day = parts[0];
+                      const month = parts[1];
+                      const year = parts[2]
+                     return(
+
                       <Button
                       key={index}
-                      m={1}
-                      bg={selectedDate === index ? bgColor : "blue.400"}
-                      color={"black"}
+                      
+                      width="50px"
+                      height="95px"
+                      borderRadius={"25px"}
+                      bg={selectedDate === index ? bgColor : "#5188ff"}
+                      color={"white"}
                       onClick={() => {
                         setSelectedDate((prev) => (prev === index ? null : index));
                         setBooking((prevState) => ({ ...prevState, date }))
                       }}
+                      
                     >
-                      {date}
+                      <div className=" text-center">{day}/
+                      <br/>
+                      {month}/
+                      <br/>
+                      {year}
+                      </div>
+                      
+                      
+                      
                     </Button>
-                    ))}
-                </Stack>
+                     )
+                      
+})}
+                </HStack>
               {/* </div> */}
-              <Stack  m={{ base: 2, md: 3, xl: 4 }}  display={{base: "flex", sm:"flex", md: "block", xl: "flex", "2xl": "block",}}>
-                <p>Time:</p>
+                <h6 className="mt-4 mb-0">Time:</h6><br/>
+              <HStack  m={{ base: 1, md: 2, xl: 4 }} >
                 <Button
-                 m={1}
-                  bg={selected === 0 ? bgColor : "blue.400"}
-                  color={"black"}
+                 
+                 width="50px"
+                      height="95px"
+                      borderRadius={"25px"}
+                  bg={selected === 0 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() => {
                     setSelected((prev) => (prev === 0 ? null : 0));
                     setBooking({ ...booking, time: "11.30 am" });
                   }}
                 >
-                  11.30 am
+                  11<br/>
+                  30 <br/>am
                 </Button>
                 <Button
                 m={1}
-                  bg={selected === 1 ? bgColor : "blue.400"}
-                  color={"black"}
+                width="50px"
+                height="95px"
+                borderRadius={"25px"}
+                  bg={selected === 1 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() => {
                     setSelected((prev) => (prev === 1 ? null : 1));
                     setBooking({ ...booking, time: "2.30 pm" });
                   }}
                 >
-                  2.30 pm
+                  2<br/>30<br/> pm
                 </Button>
                 <Button
                 m={1}
-                  bg={selected === 2 ? bgColor : "blue.400"}
-                  color={"black"}
+                width="50px"
+                height="95px"
+                borderRadius={"25px"}
+                  bg={selected === 2 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() => {
                     setSelected((prev) => (prev === 2 ? null : 2));
                     setBooking({ ...booking, time: "5.00 pm" });
                   }}
                 >
-                  5.00 pm
+                  5<br/>00<br/> pm
                 </Button>
                 <Button
                 m={1}
-                  bg={selected === 3 ? bgColor : "blue.400"}
-                  color={"black"}
+                width="50px"
+                height="95px"
+                borderRadius={"25px"}
+                  bg={selected === 3 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() => {
                     setSelected((prev) => (prev === 3 ? null : 3));
                     setBooking({ ...booking, time: "9.00 pm" });
                   }}
                 >
-                  9.00 pm
+                  9<br/>00<br/> pm
                 </Button>
-              </Stack>
+              </HStack>
               <div className="input-field">
                 <i className="fas fa-user"></i>
                 <input

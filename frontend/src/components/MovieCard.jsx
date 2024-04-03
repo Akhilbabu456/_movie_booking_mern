@@ -53,19 +53,21 @@ const MovieCard = () => {
       {movieList.map((movie)=>{
          return (
           <>
-        <div className="col mb-4 d-flex justify-content-center">
+        <div key={movie._id} className="col mb-4 d-flex justify-content-center">
           <div className="movie-card">
             <img
               src={movie.poster}
               alt="Avatar wallpaper"
             />
-            <h3>{movie.title}</h3>
-            <div className="content">
-              <h1>{movie.title}</h1>
-
-              <div className="infos">
-                <span>·&nbsp;&nbsp;2022&nbsp;&nbsp;·&nbsp;&nbsp;{movie.duration}</span>
-              </div>
+               
+               <div className="overlay"></div>
+               <div className="content">
+                 <h1>{movie.title}</h1>
+                 <div className="infos">
+                   <span className="ms-5">&nbsp;&nbsp;&nbsp;📅2024&nbsp;&nbsp;&nbsp;&nbsp;⌛{movie.duration}</span>
+                   
+                 </div>
+                 <h5 className="rating">⭐{movie.rating}/10</h5>
 
              
 

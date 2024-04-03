@@ -2,9 +2,9 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UploadWidget from "../hooks/UploadWidget";
-import { Button, Stack, useColorModeValue, useToast } from "@chakra-ui/react";
+import { Button, HStack, Stack, useColorModeValue, useToast } from "@chakra-ui/react";
 import Loader from "./Loader";
-
+import "./AddMovie.css"
 
 
 const EditMovie = () => {
@@ -13,7 +13,7 @@ const EditMovie = () => {
    const toast = useToast()
    const [loading, setLoading] = useState(false)
    const [selected, setSelected] = useState(null);
-  const bgColor = useColorModeValue("green.200", "green.700");
+  const bgColor = useColorModeValue("green.200", "green.500");
   const [date, setDate] = useState([])
   const{ id }= useParams();
   //const [movieDate, setMovieDate] = useState([])
@@ -70,14 +70,18 @@ const EditMovie = () => {
     const today = new Date();
     const days = [];
 
+    const monthNames = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+];
     for (let i = 0; i < 7; i++) {
       const newDate = new Date(today);
       newDate.setDate(today.getDate() + i);
       const dd = String(newDate.getDate()).padStart(2, '0');
-      const mm = String(newDate.getMonth() + 1).padStart(2, '0');
-      const yyyy = newDate.getFullYear();
+      const mm = monthNames[newDate.getMonth()];
+      console.log(mm)
 
-      days.push( `${dd}-${mm}-${yyyy}` );
+      days.push( `${dd}-${mm}` );
     }
 
     setDate(days);
@@ -156,7 +160,7 @@ const EditMovie = () => {
           <div className="signin-signup">
             <form
               action="#"
-              className="sign-in-form"
+              className="sign-in-form1"
               
             >
               <h2 className="title">Edit Movie</h2>
@@ -228,12 +232,14 @@ const EditMovie = () => {
                
               </div> */}
 
-<Stack  m={{ base: 2, md: 3, xl: 4 }}  display={{base: "flex", sm:"flex", md: "block", xl: "flex", "2xl": "block",}}>
                 <p>Dates:</p>
+<HStack  m={{ base: 2, md: 3, xl: 4 }}  >
                   <Button
-                 m={1}
-                  bg={selected === 0 ? bgColor : "blue.400"}
-                  color={"black"}
+                width="54px"
+                height="95px"
+                borderRadius={"25px"}
+                  bg={selected === 0 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[0]] }))
                   setSelected((prev) => (prev === 0 ? null : 0));
                 }}
@@ -241,9 +247,11 @@ const EditMovie = () => {
                     {date[0]}
                   </Button>
                   <Button
-                 m={1}
-                  bg={selected === 1 ? bgColor : "blue.400"}
-                  color={"black"}
+                 width="54px"
+                 height="95px"
+                 borderRadius={"25px"}
+                  bg={selected === 1 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[1]] }))
                   setSelected((prev) => (prev === 1 ? null : 1));
                 }}
@@ -251,9 +259,11 @@ const EditMovie = () => {
                     {date[1]}
                   </Button>
                   <Button
-                 m={1}
-                  bg={selected === 2 ? bgColor : "blue.400"}
-                  color={"black"}
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected === 2 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[2]] }))
                   setSelected((prev) => (prev === 2 ? null : 2));
                 }}
@@ -261,9 +271,11 @@ const EditMovie = () => {
                     {date[2]}
                   </Button>
                   <Button
-                 m={1}
-                  bg={selected === 3 ? bgColor : "blue.400"}
-                  color={"black"}
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected === 3 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[3]] }))
                   setSelected((prev) => (prev === 3 ? null : 3));
                 }}
@@ -271,9 +283,11 @@ const EditMovie = () => {
                     {date[3]}
                   </Button>
                   <Button
-                 m={1}
-                  bg={selected === 4 ? bgColor : "blue.400"}
-                  color={"black"}
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected === 4 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[4]] }))
                   setSelected((prev) => (prev === 4 ? null : 4));
                 }}
@@ -281,9 +295,11 @@ const EditMovie = () => {
                     {date[4]}
                   </Button>
                   <Button
-                 m={1}
-                  bg={selected === 5 ? bgColor : "blue.400"}
-                  color={"black"}
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected === 5 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[5]] }))
                   setSelected((prev) => (prev === 5 ? null : 5));
                 }}
@@ -291,16 +307,18 @@ const EditMovie = () => {
                     {date[5]}
                   </Button>
                   <Button
-                 m={1}
-                  bg={selected === 6 ? bgColor : "blue.400"}
-                  color={"black"}
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected === 6 ? bgColor : "#5188ff"}
+                  color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[6]] }))
                   setSelected((prev) => (prev === 6 ? null : 6));
                 }}
                   >
                     {date[6]}
                   </Button>
-                </Stack>
+                </HStack>
               
 
               <label htmlFor="poster" style={{fontSize: "20px", fontWeight: "20px", marginTop: "16px"}}>Poster:</label>

@@ -5,7 +5,7 @@
     position: relative;
     margin: 2em;
 }
-.movie-card h3{
+.movie-card h5{
     position: absolute;
     bottom: 5px;
     color: #fff;
@@ -45,6 +45,8 @@
 }
 
 .movie-card .btn{
+    position: absolute;
+    bottom: 25px;
     padding: 0.6em 1.3em;
     text-decoration: none;
     color: #fff;
@@ -59,4 +61,17 @@
 .movie-card .content .infos{
     position: relative;
     right: 83px;
+}
+
+.overlay{
+    position: absolute;
+    top: 0;
+    background: rgba(0, 0, 0, 0.158);
+    width: 18em;
+    height: 25em;
+}
+.rating{
+    position: relative;
+    right: 183px;
+    top: 290px;
 }

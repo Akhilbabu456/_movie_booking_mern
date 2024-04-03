@@ -48,7 +48,7 @@ export default function CollectionPage() {
     <>
       <Header/>
       {loading && <Loader/>}
-      <Card>
+      <Card m={10} >
         <CardHeader pb="0">
           <Heading as="h4" fontWeight="medium" size="md">
             Today collection
@@ -61,7 +61,7 @@ export default function CollectionPage() {
             valueFormatter={valueFormatter}
             yAxisWidth={80}
             height="400px"
-            colorScheme="#36A2EB"
+            colors={['#5188ff']}
           />
         </CardBody>
       </Card>
