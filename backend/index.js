@@ -9,6 +9,10 @@ const app = express()
 dotenv.config()
 const port = process.env.PORT
 connectToMongo()
+app.use(cors({
+  origin: true,
+}));
+app.use(express.json())
 app.use(session({
   secret: 'hello',
   resave: false,
@@ -19,8 +23,6 @@ app.use(session({
 const userRoute = require("./routes/user")
 const adminRoute = require("./routes/admin")
 
-app.use(cors());
-app.use(express.json())
 
 app.use("/api/user", userRoute)
 app.use("/api/admin", adminRoute)
