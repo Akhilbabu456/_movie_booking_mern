@@ -6,15 +6,12 @@ import { BrowserRouter } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
 
 
-// const customTheme = {
-//   styles: {
-//     global: {
-//       body: {
-//         bg: "dark.800", // Set your desired background color here
-//       },
-//     },
+
+//   config: {
+//     useSystemColorMode: false,
+//     initialColorMode: 'dark',
 //   },
-// };
+// });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
