@@ -19,9 +19,7 @@ app.use(session({
 const userRoute = require("./routes/user")
 const adminRoute = require("./routes/admin")
 
-app.use(cors({
-  origin: '*',
-}));
+app.use(cors());
 app.use(express.json())
 
 app.use("/api/user", userRoute)
