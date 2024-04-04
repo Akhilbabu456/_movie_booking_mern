@@ -65,7 +65,7 @@ const MovieView = () => {
          }
        })
        if(res.ok){
-        navigate("/user")
+        navigate("/admin")
          toast({
           title: "Deleted",
           description: "Movie Deleted Successfully",
@@ -92,11 +92,13 @@ const MovieView = () => {
           "Authorization" :`${localStorage.getItem("token")}`
         }
       })
+     
       setDisableLoading(false)
       if(res.ok){
+        const action = movie.disable ? "Enabled" : "Disabled";
         navigate("/admin")
         toast({
-          title: "Movie disabled",
+          title: `Movie ${action}`,
           status: "success",
           duration: 2500,
           isClosable: true,
@@ -141,7 +143,7 @@ const MovieView = () => {
             <p>{movie.description}</p>
             {role === "user" && (
               <Link to={`/user/view/book/${movie._id}`} className="btn btn-primary">
-                 {loading? <Loader size={8} color={"#fff"}/>: "Book Ticket"}
+                 {loading? <Loader size={3} color={"#fff"}/>: "Book Ticket"}
               </Link>
             )}
             {role === "admin" && (
@@ -155,7 +157,12 @@ const MovieView = () => {
                 <button type="button" className="btn btn-danger mx-1 my-1" data-bs-toggle="modal" data-bs-target="#exampleModal{{this._id}}" data-backdrop="false">
                   Delete
                 </button>{" "}
-                <button className="btn btn-secondary" onClick={handleDisable}> {disableLoading? <Loader size={8} color={"#fff"}/>: "Disable"}</button>
+                <button className="btn btn-secondary" onClick={handleDisable}>  {disableLoading ? (
+                <Loader size={8} color={"#fff"} />
+              ) : (
+                movie.disable ? "Enable" : "Disable"
+              )}
+              </button>
               </>
             )}
             <div

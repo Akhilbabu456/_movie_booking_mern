@@ -246,7 +246,7 @@ const LoginCard = () => {
               Sign up
             </button>
           </div>
-          <img src="/login.png" className="image" alt="" />
+          <img src="/signup.png" className="image" alt="" />
         </div>
         <div className="panel right-panel">
           <div className="content">
@@ -259,7 +259,7 @@ const LoginCard = () => {
               Sign in
             </button>
           </div>
-          <img src="/register.png" className="image" alt="" />
+          <img src="/login.png" className="image" alt="" />
         </div>
       </div>
     </div>

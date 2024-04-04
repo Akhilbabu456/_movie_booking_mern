@@ -8,7 +8,7 @@ export default function Header() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   let toast = useToast()
-  let user = localStorage.getItem("token");
+  let user = JSON.parse(localStorage.getItem("user"));
   let detail = JSON.parse(localStorage.getItem("user"));
   const [role, setRole] = useState("");
   // setRole(detail.data.role)
@@ -32,11 +32,11 @@ export default function Header() {
   return (
     <>
       <nav
-        className="navbar navbar-no-border navbar-expand-lg border-bottom border-body"
+        className="navbar navbar-no-border navbar-expand-lg border-body fixed-top"
         data-bs-theme="dark"
       >
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/user">
+          <Link className="navbar-brand" to={user.data.role === "admin"? "/admin": "/user"}>
             <img src="/logo.png" alt="Logo" className="logo" />
           </Link>
           <button
@@ -56,7 +56,7 @@ export default function Header() {
                 <Link
                   className="nav-link"
                   aria-current="page"
-                  to="/user"
+                  to={user.data.role === "admin"? "/admin": "/user"}
                   hidden
                 >
                   Home
@@ -64,7 +64,7 @@ export default function Header() {
               </li>
             </ul>
 
-            <Link className="text-white mx-3" to="/user">
+            <Link className="text-white mx-3" to={user.data.role === "admin"? "/admin": "/user"}>
               Home
             </Link>
             {role === "user" && <Link className="text-white mx-3" to="/user/mybooking">

@@ -247,6 +247,15 @@ const BookingPage = () => {
 
   const handleBooking = async (e) => {
     e.preventDefault();
+    if (!selectedDate || !selected) {
+      toast({
+        title: "All fields are required",
+        status: "error",
+        duration: 2500,
+        isClosable: true,
+      });
+      return;
+    }
     setLoading(true)
     const generateReceiptId = () => {
       // Generate a random string
@@ -483,7 +492,7 @@ const BookingPage = () => {
               </div>
 
               <button className="btn1 solid" onClick={handleBooking}>
-              {loading? <Loader size={8} color={"#fff"}/>: "Book Ticket"}
+              {loading? <Loader size={5} color={"#fff"}/>: "Book Ticket"}
               </button>
             </form>
           </div>
@@ -498,7 +507,7 @@ const BookingPage = () => {
                 Back
               </Link>
             </div>
-            <img src="/add.png" className="image" alt="" />
+            <img src="/book.png" className="image" alt="" />
           </div>
         </div>
       </div>

@@ -9,12 +9,12 @@ import "./AddMovie.css"
 
 
 const AddMovie = () => {
-  const token = localStorage.getItem("token")
+  const token = JSON.parse(localStorage.getItem("user"))
   const navigate = useNavigate()
    const toast = useToast()
    const [loading, setLoading] = useState(false)
   const [date, setDate] = useState([])
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState([]);
   const bgColor = useColorModeValue("green.200", "green.500");
   //const [movieDate, setMovieDate] = useState([])
   const [newMovie, setNewMovie] = useState({
@@ -31,7 +31,7 @@ const AddMovie = () => {
   
   
   useEffect(() => {
-    if(!token){
+    if(token.data.role !== "admin"){
       navigate("/")
       toast({
         title: "Unauthorized",
@@ -100,6 +100,16 @@ const AddMovie = () => {
   const handleAddMovie = async (e) => {
     setLoading(true)
     e.preventDefault();
+    if (newMovie.dates.length === 0 || !newMovie.poster || !newMovie.banner) {
+      toast({
+        title: "All fields are required",
+        status: "error",
+        duration: 2500,
+        isClosable: true,
+      });
+      setLoading(false)
+      return;
+    }
     let response = await fetch("https://movie-booking-mern.vercel.app/api/admin/add", {
       method: "POST",
       headers: {
@@ -137,6 +147,14 @@ const AddMovie = () => {
       });
     }
   }
+
+  const handleButtonClick = (index) => {
+    if (selected.includes(index)) {
+      setSelected(selected.filter((item) => item !== index));
+    } else {
+      setSelected([...selected, index]);
+    }
+  };
 
   return (
     <>
@@ -216,10 +234,10 @@ const AddMovie = () => {
                   height="95px"
                   
                   borderRadius={"25px"}
-                  bg={selected === 0 ? bgColor : "#5188ff"}
+                  bg={selected.includes(0) ? bgColor : "#5188ff"}
                   color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[0]] }))
-                  setSelected((prev) => (prev === 0 ? null : 0));
+                  handleButtonClick(0)
                 }}
                   >
                     {date[0]}
@@ -228,10 +246,10 @@ const AddMovie = () => {
                   width="54px"
                   height="95px"
                   borderRadius={"25px"}
-                  bg={selected === 1 ? bgColor : "#5188ff"}
+                  bg={selected.includes(1) ? bgColor : "#5188ff"}
                   color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[1]] }))
-                  setSelected((prev) => (prev === 1 ? null : 1));
+                  handleButtonClick(1)
                 }}
                   >
                     {date[1]}
@@ -240,10 +258,10 @@ const AddMovie = () => {
                   width="54px"
                   height="95px"
                   borderRadius={"25px"}
-                  bg={selected === 2 ? bgColor : "#5188ff"}
+                  bg={selected.includes(2) ? bgColor : "#5188ff"}
                   color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[2]] }))
-                  setSelected((prev) => (prev === 2 ? null : 2));
+                  handleButtonClick(2)
                 }}
                   >
                     {date[2]}
@@ -252,10 +270,10 @@ const AddMovie = () => {
                   width="54px"
                   height="95px"
                   borderRadius={"25px"}
-                  bg={selected === 3 ? bgColor : "#5188ff"}
+                  bg={selected.includes(3) ? bgColor : "#5188ff"}
                   color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[3]] }))
-                  setSelected((prev) => (prev === 3 ? null : 3));
+                  handleButtonClick(3)
                 }}
                   >
                     {date[3]}
@@ -264,10 +282,10 @@ const AddMovie = () => {
                   width="54px"
                   height="95px"
                   borderRadius={"25px"}
-                  bg={selected === 4 ? bgColor : "#5188ff"}
+                  bg={selected.includes(4) ? bgColor : "#5188ff"}
                   color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[4]] }))
-                  setSelected((prev) => (prev === 4 ? null : 4));
+                  handleButtonClick(4)
                 }}
                   >
                     {date[4]}
@@ -276,10 +294,10 @@ const AddMovie = () => {
                  width="54px"
                  height="95px"
                  borderRadius={"25px"}
-                  bg={selected === 5 ? bgColor : "#5188ff"}
+                  bg={selected.includes(5) ? bgColor : "#5188ff"}
                   color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[5]] }))
-                  setSelected((prev) => (prev === 5 ? null : 5));
+                  handleButtonClick(5)
                 }}
                   >
                     {date[5]}
@@ -288,10 +306,10 @@ const AddMovie = () => {
                   width="54px"
                   height="95px"
                   borderRadius={"25px"}
-                  bg={selected === 6 ? bgColor : "#5188ff"}
+                  bg={selected.includes(6) ? bgColor : "#5188ff"}
                   color={"white"}
                   onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[6]] }))
-                  setSelected((prev) => (prev === 6 ? null : 6));
+                  handleButtonClick(6)
                 }}
                   >
                     {date[6]}
@@ -342,7 +360,7 @@ const AddMovie = () => {
                 Back
               </Link>
             </div>
-            <img src="/add.png" className="image" alt="" />
+            <img src="/film.png" className="image" alt="" />
           </div>
         </div>
       </div>

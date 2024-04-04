@@ -8,11 +8,11 @@ import "./AddMovie.css"
 
 
 const EditMovie = () => {
-  const token = localStorage.getItem("token")
+  const token = JSON.parse(localStorage.getItem("user"))
   const navigate = useNavigate()
    const toast = useToast()
    const [loading, setLoading] = useState(false)
-   const [selected, setSelected] = useState(null);
+   const [selected, setSelected] = useState([]);
   const bgColor = useColorModeValue("green.200", "green.500");
   const [date, setDate] = useState([])
   const{ id }= useParams();
@@ -31,7 +31,7 @@ const EditMovie = () => {
   
   
   useEffect(() => {
-    if(!token){
+    if(token.data.role !== "admin"){
       navigate("/")
       toast({
         title: "Unauthorized",
@@ -153,6 +153,14 @@ const EditMovie = () => {
       }
   }
 
+  const handleButtonClick = (index) => {
+    if (selected.includes(index)) {
+      setSelected(selected.filter((item) => item !== index));
+    } else {
+      setSelected([...selected, index]);
+    }
+  };
+
   return (
     <>
       <div className="container1 ">
@@ -233,7 +241,7 @@ const EditMovie = () => {
               </div> */}
 
                 <p>Dates:</p>
-<HStack  m={{ base: 2, md: 3, xl: 4 }}  >
+{/* <HStack  m={{ base: 2, md: 3, xl: 4 }}  >
                   <Button
                 width="54px"
                 height="95px"
@@ -318,7 +326,96 @@ const EditMovie = () => {
                   >
                     {date[6]}
                   </Button>
+                </HStack> */}
+
+<HStack  m={{ base: 2, md: 3, xl: 4 }}  >
+                  <Button
+                  width="54px"
+                  height="95px"
+                  
+                  borderRadius={"25px"}
+                  bg={selected.includes(0) ? bgColor : "#5188ff"}
+                  color={"white"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[0]] }))
+                  handleButtonClick(0)
+                }}
+                  >
+                    {date[0]}
+                  </Button>
+                  <Button
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected.includes(1) ? bgColor : "#5188ff"}
+                  color={"white"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[1]] }))
+                  handleButtonClick(1)
+                }}
+                  >
+                    {date[1]}
+                  </Button>
+                  <Button
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected.includes(2) ? bgColor : "#5188ff"}
+                  color={"white"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[2]] }))
+                  handleButtonClick(2)
+                }}
+                  >
+                    {date[2]}
+                  </Button>
+                  <Button
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected.includes(3) ? bgColor : "#5188ff"}
+                  color={"white"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[3]] }))
+                  handleButtonClick(3)
+                }}
+                  >
+                    {date[3]}
+                  </Button>
+                  <Button
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected.includes(4) ? bgColor : "#5188ff"}
+                  color={"white"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[4]] }))
+                  handleButtonClick(4)
+                }}
+                  >
+                    {date[4]}
+                  </Button>
+                  <Button
+                 width="54px"
+                 height="95px"
+                 borderRadius={"25px"}
+                  bg={selected.includes(5) ? bgColor : "#5188ff"}
+                  color={"white"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[5]] }))
+                  handleButtonClick(5)
+                }}
+                  >
+                    {date[5]}
+                  </Button>
+                  <Button
+                  width="54px"
+                  height="95px"
+                  borderRadius={"25px"}
+                  bg={selected.includes(6) ? bgColor : "#5188ff"}
+                  color={"white"}
+                  onClick={() =>{ setNewMovie(prevState => ({ ...prevState, dates: [...prevState.dates, date[6]] }))
+                  handleButtonClick(6)
+                }}
+                  >
+                    {date[6]}
+                  </Button>
                 </HStack>
+            
               
 
               <label htmlFor="poster" style={{fontSize: "20px", fontWeight: "20px", marginTop: "16px"}}>Poster:</label>
@@ -363,7 +460,7 @@ const EditMovie = () => {
                 Back
               </Link>
             </div>
-            <img src="/add.png" className="image" alt="" />
+            <img src="/film.png" className="image" alt="" />
           </div>
         </div>
       </div>
