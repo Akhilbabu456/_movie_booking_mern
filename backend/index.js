@@ -21,7 +21,6 @@ const adminRoute = require("./routes/admin")
 
 app.use(cors({
   origin: 'https://movie-booking-mern-58s1.vercel.app',
-  methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json())
