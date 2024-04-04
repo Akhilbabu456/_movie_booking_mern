@@ -8,6 +8,7 @@ import "./AddMovie.css"
 
 
 const EditMovie = () => {
+  const user = localStorage.getItem("token")
   const token = JSON.parse(localStorage.getItem("user"))
   const navigate = useNavigate()
    const toast = useToast()
@@ -51,7 +52,7 @@ const EditMovie = () => {
                   method: "GET",
                   headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `${token}`,
+                    "Authorization": `${user}`,
                   },
                 }
               );
