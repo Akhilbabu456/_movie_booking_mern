@@ -19,10 +19,7 @@ app.use(session({
 const userRoute = require("./routes/user")
 const adminRoute = require("./routes/admin")
 
-app.use(cors({
-  origin: 'https://movie-booking-mern-58s1.vercel.app',
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(cors());
 app.use(express.json())
 
 app.use("/api/user", userRoute)
