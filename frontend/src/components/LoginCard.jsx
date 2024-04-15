@@ -104,7 +104,7 @@ const LoginCard = () => {
             isClosable: true,
           })
         }
-      },35000)
+      },30000)
     }catch(err){
       console.log(err)
     
