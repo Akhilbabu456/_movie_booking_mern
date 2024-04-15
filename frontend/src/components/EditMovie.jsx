@@ -2,7 +2,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UploadWidget from "../hooks/UploadWidget";
-import { Button, HStack, Stack, useColorModeValue, useToast } from "@chakra-ui/react";
+import { Button, HStack, useColorModeValue, useToast } from "@chakra-ui/react";
 import Loader from "./Loader";
 import "./AddMovie.css"
 
