@@ -35,7 +35,7 @@ const LoginCard = () => {
       })
       let data = await res.json()
       setId(data.token)
-      console.log(data)
+      console.log(data.token)
 
       if(res.status === 200){
         setLoading(true)
@@ -85,7 +85,7 @@ const LoginCard = () => {
             "Content-Type": "application/json",
           }
         })
-        if(response.status === 200){
+        if(response.status !== 200){
           setLoading(false)
           setAuthScreen("login")
           toast({
