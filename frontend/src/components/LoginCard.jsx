@@ -85,7 +85,7 @@ const LoginCard = () => {
             "Content-Type": "application/json",
           }
         })
-        if(response.status !== 200){
+        if(response.status === 200){
           setLoading(false)
           setAuthScreen("login")
           toast({
