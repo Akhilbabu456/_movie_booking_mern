@@ -97,7 +97,7 @@ router.get("/verify/:id", async(req,res)=>{
     
 
   
-  if(verified){
+  if(verified.length !== 0){
     res.status(200).json({ success: 'Account Created' });
   }else{
     res.status(400).json({ error: 'Email not verified' });
